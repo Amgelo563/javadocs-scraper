@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/Amgelo563/javadocs-scraper/blob/main/assets/javadocs-scraper.png?raw=true" alt="javadocs-scraper logo"/>
+  <img src="https://github.com/Amgelo563/javadocs-scraper/blob/main/assets/javadocs-scraper.png?raw=true" alt="javadocs-scraper logo" width="250"/>
 </p>
 
 # `📚` javadocs-scraper
