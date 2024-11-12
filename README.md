@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/Amgelo563/javadocs-scraper/blob/master/assets/javadocs-scraper.png?raw=true" alt="javadocs-scraper logo"/>
+  <img src="https://github.com/Amgelo563/javadocs-scraper/blob/main/assets/javadocs-scraper.png?raw=true" alt="javadocs-scraper logo"/>
 </p>
 
 # `📚` javadocs-scraper
@@ -13,19 +13,19 @@ A TypeScript library to scrape Java objects information from a Javadocs website.
 
 Specifically, it scrapes data (name, description, url, etc) about, and links together:
 
-- Packages
-- Classes
-- Interfaces
-- Object Type Parameters (Object Generics), on classes and interfaces
-- Enums
-    - Enum Constants
-- Annotations
-    - Annotation Elements
-- Fields
-- Methods
-    - Return Type
-    - Parameters
-    - Type Parameters (Method Generics)
+- [Packages](https://github.com/Amgelo563/javadocs-scraper/blob/main/src/entities/package/PackageData.ts)
+- [Classes](https://github.com/Amgelo563/javadocs-scraper/blob/main/src/entities/class/ClassData.ts)
+- [Interfaces](https://github.com/Amgelo563/javadocs-scraper/blob/main/src/entities/interface/InterfaceData.ts)
+- [Object Type Parameters (Object Generics)](https://github.com/Amgelo563/javadocs-scraper/blob/main/src/entities/object/ObjectTypeParameterData.ts), on classes and interfaces
+- [Enums](https://github.com/Amgelo563/javadocs-scraper/blob/main/src/entities/enum/EnumData.ts)
+    - [Enum Constants](https://github.com/Amgelo563/javadocs-scraper/blob/main/src/entities/enum/constant/EnumConstantData.ts)
+- [Annotations](https://github.com/Amgelo563/javadocs-scraper/blob/main/src/entities/annotation/AnnotationData.ts)
+    - [Annotation Elements](https://github.com/Amgelo563/javadocs-scraper/blob/main/src/entities/annotation/element/AnnotationElementData.ts)
+- [Fields](https://github.com/Amgelo563/javadocs-scraper/blob/main/src/entities/field/FieldData.ts)
+- [Methods](https://github.com/Amgelo563/javadocs-scraper/blob/main/src/entities/method/MethodData.ts)
+    - [Return Type](https://github.com/Amgelo563/javadocs-scraper/blob/main/src/entities/method/return/MethodReturnData.ts)
+    - [Parameters](https://github.com/Amgelo563/javadocs-scraper/blob/main/src/entities/parameter/ParameterData.ts)
+    - [Type Parameters (Method Generics)](https://github.com/Amgelo563/javadocs-scraper/blob/main/src/entities/method/type/MethodTypeParameterData.ts)
 
 Some extra data is also calculated post scraping, like method and field inheritance.
 
