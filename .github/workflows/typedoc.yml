@@ -4,6 +4,10 @@ on:
   push:
     branches:
       - main
+    paths:
+      - src/**
+      - pnpm-lock.yaml
+      - package.json
   workflow_dispatch:
 
 concurrency:
