@@ -4,6 +4,8 @@ on:
 
 permissions:
   contents: read # for checkout
+  id-token: write # to enable use of OIDC for npm provenance
+  packages: write # to publish a GitHub release
 
 jobs:
   release:
@@ -34,4 +36,5 @@ jobs:
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npx semantic-release
