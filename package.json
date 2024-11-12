@@ -1,0 +1,59 @@
+{
+  "name": "javadocs-scraper",
+  "version": "1.0.0",
+  "description": "A TypeScript library to scrape JavaDocs information.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "clean": "rimraf ./dist",
+    "build": "pnpm run clean && tsup ./src",
+    "barrel": "pnpm dlx barrelsby -- -d ./src -D -q -H",
+    "lint": "eslint src",
+    "format": "prettier --write src",
+    "prepare": "husky || true",
+    "typedoc": "typedoc src/index.ts"
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "MIT",
+  "author": "Amgelo563",
+  "dependencies": {
+    "@discordjs/collection": "2.1.1",
+    "cheerio": "1.0.0"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "19.5.0",
+    "@commitlint/config-conventional": "19.5.0",
+    "@commitlint/types": "19.5.0",
+    "@eslint/js": "9.7.0",
+    "@mxssfd/typedoc-theme": "1.1.7",
+    "@types/eslint__js": "8.42.3",
+    "@types/node": "20.14.10",
+    "@typescript-eslint/eslint-plugin": "8.6.0",
+    "@typescript-eslint/parser": "8.6.0",
+    "domhandler": "5.0.3",
+    "eslint": "9.7.0",
+    "eslint-config-prettier": "9.1.0",
+    "globals": "15.8.0",
+    "husky": "9.1.6",
+    "lint-staged": "15.2.10",
+    "prettier": "3.3.2",
+    "rimraf": "6.0.1",
+    "tsup": "8.3.5",
+    "typedoc": "0.26.11",
+    "typedoc-plugin-extras": "3.1.0",
+    "typescript": "5.5.4",
+    "typescript-eslint": "8.6.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "packageManager": "pnpm@9.5.0",
+  "lint-staged": {
+    "*.ts": [
+      "pnpm format",
+      "pnpm lint --fix"
+    ]
+  }
+}
