@@ -9,4 +9,6 @@ export interface EnumConstantData
   ordinal: number;
   /** The enum constant's deprecation notice, if any. */
   deprecation: DeprecationContent | null;
+  /** The enum constant's Javadocs URL. */
+  url: string;
 }
