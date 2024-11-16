@@ -58,7 +58,7 @@ export class LegacyQueryStrategy implements QueryStrategy {
     const extendsHtml = $object(
       '.description > .blockList > .blockList > pre',
     ).html();
-    if (!extendsHtml) {
+    if (!extendsHtml || !extendsHtml.length) {
       return null;
     }
 
@@ -72,7 +72,7 @@ export class LegacyQueryStrategy implements QueryStrategy {
     const extendsHtml = $object(
       '.description > .blockList > .blockList > pre',
     ).html();
-    if (!extendsHtml) {
+    if (!extendsHtml || !extendsHtml.length) {
       return null;
     }
 
@@ -187,9 +187,11 @@ export class LegacyQueryStrategy implements QueryStrategy {
       return null;
     }
 
+    const text = $deprecation.text().trim() ?? null;
+
     return {
-      text: $deprecation.text().trim() ?? null,
-      html: $deprecation.html() ?? null,
+      text,
+      html: $deprecation.html() ?? text,
       forRemoval: null,
     };
   }
@@ -206,9 +208,11 @@ export class LegacyQueryStrategy implements QueryStrategy {
 
     const $deprecation = $div.find('div.block > i');
 
+    const text = $deprecation.text().trim() ?? null;
+
     return {
-      text: $deprecation.text().trim() ?? null,
-      html: $deprecation.html() ?? null,
+      text,
+      html: $deprecation.html() ?? text,
       forRemoval: null,
     };
   }

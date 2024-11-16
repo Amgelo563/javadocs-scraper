@@ -33,17 +33,18 @@ export class ModernQueryStrategy implements QueryStrategy {
     $object: CheerioAPI,
   ): DeprecationContent | null {
     const $deprecated = $object('#class-description > .deprecation-block');
-    if (!$deprecated) return null;
+    if (!$deprecated || !$deprecated.length) return null;
 
     const label = $deprecated.find('.deprecated-label');
     const forRemoval = label.text().includes('for removal');
 
     const $comment = $deprecated.find('.deprecation-comment');
+    const text = $comment.text().trim() ?? null;
 
     return {
       forRemoval,
-      text: $comment.text(),
-      html: $comment.html(),
+      html: $comment.html() ?? text ?? null,
+      text,
     };
   }
 
@@ -57,7 +58,7 @@ export class ModernQueryStrategy implements QueryStrategy {
 
   public queryExtensionsWithTypesHtml($object: CheerioAPI): string | null {
     const extendsHtml = $object('.extends-implements').html();
-    if (!extendsHtml) {
+    if (!extendsHtml || !extendsHtml.length) {
       return null;
     }
 
@@ -69,7 +70,7 @@ export class ModernQueryStrategy implements QueryStrategy {
 
   public queryImplementationsWithTypesHtml($object: CheerioAPI): string | null {
     const extendsHtml = $object('.extends-implements').html();
-    if (!extendsHtml) {
+    if (!extendsHtml || !extendsHtml.length) {
       return null;
     }
 
@@ -124,17 +125,18 @@ export class ModernQueryStrategy implements QueryStrategy {
     $member: Cheerio<Element>,
   ): DeprecationContent | null {
     const $deprecated = $member.find('.deprecation-block');
-    if (!$deprecated) return null;
+    if (!$deprecated || !$deprecated.length) return null;
 
     const label = $deprecated.find('.deprecated-label');
     const forRemoval = label.text().includes('for removal');
 
     const $comment = $deprecated.find('.deprecation-comment');
+    const text = $comment.text().trim() ?? null;
 
     return {
       forRemoval,
-      text: $comment.text().trim() ?? null,
-      html: $comment.html() ?? null,
+      text,
+      html: $comment.html() ?? text,
     };
   }
 
