@@ -1,3 +1,9 @@
+## [1.2.0](https://github.com/Amgelo563/javadocs-scraper/compare/v1.1.0...v1.2.0) (2024-11-16)
+
+### Features
+
+* fallback to text for node content ([e29b76c](https://github.com/Amgelo563/javadocs-scraper/commit/e29b76c3bd7b5387323c01717580fc3862eb958c))
+
 ## [1.1.0](https://github.com/Amgelo563/javadocs-scraper/compare/v1.0.1...v1.1.0) (2024-11-15)
 
 ### Features
