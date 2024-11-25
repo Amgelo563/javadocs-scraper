@@ -1,6 +1,7 @@
 export * from './scrapers/Scraper';
 export * from './entities/access/AccessModifier';
 export * from './entities/annotation/AnnotationData';
+export * from './entities/annotation/element/AnnotationElementData';
 export * from './entities/annotation/element/ElementType';
 export * from './entities/annotation/retention/RetentionPolicy';
 export * from './entities/class/ClassData';
