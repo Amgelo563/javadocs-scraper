@@ -1,7 +1,9 @@
 import { Collection } from '@discordjs/collection';
 import type { AnnotationElementData } from '../../entities/annotation/element/AnnotationElementData';
-import type { ElementType } from '../../entities/annotation/element/ElementType';
-import { toElementType } from '../../entities/annotation/element/ElementType';
+import {
+  toElementTypes,
+  type ElementType,
+} from '../../entities/annotation/element/ElementType';
 import type { RetentionPolicy } from '../../entities/annotation/retention/RetentionPolicy';
 import { toRetentionPolicy } from '../../entities/annotation/retention/RetentionPolicy';
 import { EntityTypeEnum } from '../../entities/type/EntityType';
@@ -61,6 +63,7 @@ export class AnnotationScraper {
         ...base,
         entityType: EntityTypeEnum.Annotation,
         target: null,
+        targets: [],
         retention: null,
         elements,
         id: base.qualifiedName,
@@ -75,10 +78,10 @@ export class AnnotationScraper {
       .map((annotation) => annotation.trim());
 
     let retention: RetentionPolicy | null = null;
-    let target: ElementType | null = null;
+    let targets: ElementType[] | null = null;
 
     for (const annotation of annotations) {
-      if (retention && target) break;
+      if (retention && targets) break;
 
       if (annotation.startsWith('@Retention')) {
         const content = this.extractContent(annotation);
@@ -94,21 +97,22 @@ export class AnnotationScraper {
 
       if (annotation.startsWith('@Target')) {
         const content = this.extractContent(annotation);
-        const foundTarget = toElementType(content ?? '');
-        if (!content) {
+        const foundTargets = toElementTypes(content ?? '');
+        if (!foundTargets || !foundTargets.length) {
           throw new Error(
             `Invalid target from ${annotation}, tried to parse ${content}`,
           );
         }
 
-        target = foundTarget;
+        targets = foundTargets;
       }
     }
 
     const data: PartialAnnotationData = {
       ...base,
       entityType: EntityTypeEnum.Annotation,
-      target,
+      targets: targets ?? [],
+      target: targets?.[0] ?? null,
       retention,
       elements,
       id: base.qualifiedName,

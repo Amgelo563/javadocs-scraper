@@ -16,8 +16,13 @@ export interface AnnotationData
   url: string;
   /** The package that the annotation is in. */
   package: PackageData;
-  /** The annotation's element type target, if any. */
+  /**
+   * The annotation's element type target, if there's only one.
+   * @deprecated Use {@link targets} instead.
+   */
   target: ElementType | null;
+  /** The annotation's element type targets. */
+  targets: ElementType[];
   /**
    * The annotation's retention policy, if specified.
    *

@@ -23,16 +23,27 @@ export type ElementType =
 
 const values: Set<ElementType> = new Set(Object.values(ElementTypeEnum));
 
-/** Finds a value as an element type, otherwise `null`. */
-export function toElementType(value: unknown): ElementType | null {
+/** Finds a value's element types, otherwise `null`. */
+export function toElementTypes(value: unknown): ElementType[] | null {
   if (typeof value !== 'string') {
     return null;
   }
-  const trimmedValue = value.startsWith('value=')
-    ? value.substring('value='.length)
-    : value;
+  let trimmedValue = value;
 
-  return values.has(trimmedValue as ElementType)
-    ? (trimmedValue as ElementType)
-    : null;
+  if (trimmedValue.startsWith('value=')) {
+    trimmedValue = trimmedValue.substring('value='.length);
+  }
+
+  if (trimmedValue.startsWith('{')) {
+    trimmedValue = trimmedValue.substring(1, trimmedValue.length - 1);
+  }
+  if (trimmedValue.endsWith('}')) {
+    trimmedValue = trimmedValue.substring(0, trimmedValue.length - 1);
+  }
+
+  return trimmedValue
+    .split(',')
+    .filter((value): value is ElementType =>
+      values.has(value.trim() as ElementType),
+    );
 }
