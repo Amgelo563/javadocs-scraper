@@ -1,3 +1,13 @@
+## [1.4.0](https://github.com/Amgelo563/javadocs-scraper/compare/v1.3.0...v1.4.0) (2024-11-25)
+
+### Features
+
+* add missing top level documentation ([ab361ca](https://github.com/Amgelo563/javadocs-scraper/commit/ab361ca313625c131f8a6874586aa647ddab497b))
+
+### Bug Fixes
+
+* remove unreleased typedoc version ([3765129](https://github.com/Amgelo563/javadocs-scraper/commit/3765129a0174b17c08eee94255dd75f7b0b9c6d7))
+
 ## [1.3.0](https://github.com/Amgelo563/javadocs-scraper/compare/v1.2.0...v1.3.0) (2024-11-25)
 
 ### Features
