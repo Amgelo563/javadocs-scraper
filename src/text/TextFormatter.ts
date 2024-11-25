@@ -1,3 +1,4 @@
+/** Helper object to format text. */
 export class TextFormatter {
   // eslint-disable-next-line no-irregular-whitespace
   public static NoBreakSpaceRegex = / /g;

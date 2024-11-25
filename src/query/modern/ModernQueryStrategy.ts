@@ -3,6 +3,7 @@ import type { Element } from 'domhandler';
 import type { DeprecationContent } from '../../entities/deprecation/DeprecationContent';
 import type { QueryStrategy } from '../QueryStrategy';
 
+/** A {@link QueryStrategy} for modern Javadocs. */
 export class ModernQueryStrategy implements QueryStrategy {
   public static readonly SuperClassesExtendsRegex =
     /extends\s+(?<superClasses>[^]*?)(?=\s*(implements|$))/;

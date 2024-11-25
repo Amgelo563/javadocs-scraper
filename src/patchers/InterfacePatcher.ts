@@ -4,6 +4,7 @@ import type { PackageData } from '../entities/package/PackageData';
 import type { PartialInterfaceData } from '../partials/interface/PartialInterfaceData';
 import type { ScrapeCache } from '../scrapers/cache/ScrapeCache';
 
+/** Patches {@link PartialInterfaceData} to {@link InterfaceData}. */
 export class InterfacePatcher {
   public patchInterfaces(
     cache: ScrapeCache,

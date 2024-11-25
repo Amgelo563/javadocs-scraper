@@ -5,6 +5,7 @@ import type { ExternalEntityData } from '../../entities/external/ExternalEntityD
 import { EntityTypeEnum } from '../../entities/type/EntityType';
 import type { QueryStrategy } from '../../query/QueryStrategy';
 
+/** Scrapes the extensions and implementations from an object wrapped in a {@link CheerioAPI}. */
 export class InheritanceScraper {
   public static readonly TypeParameterHtmlRegex = /&lt;.*&gt;/g;
 

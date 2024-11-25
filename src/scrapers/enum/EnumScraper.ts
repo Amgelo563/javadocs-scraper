@@ -9,6 +9,7 @@ import type { QueryStrategy } from '../../query/QueryStrategy';
 import type { ScrapeCache } from '../cache/ScrapeCache';
 import type { BaseObjectScraper } from '../object/BaseObjectScraper';
 
+/** Scrapes data from an enum URL to a {@link PartialEnumData}. */
 export class EnumScraper {
   protected readonly baseObjectScraper: BaseObjectScraper;
 

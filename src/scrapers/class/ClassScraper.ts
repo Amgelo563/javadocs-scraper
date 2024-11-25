@@ -7,6 +7,7 @@ import type { QueryStrategy } from '../../query/QueryStrategy';
 import type { ScrapeCache } from '../cache/ScrapeCache';
 import type { BaseObjectScraper } from '../object/BaseObjectScraper';
 
+/** Scrapes data from a class URL to a {@link PartialClassData}. */
 export class ClassScraper {
   protected readonly baseObjectScraper: BaseObjectScraper;
 
@@ -22,7 +23,7 @@ export class ClassScraper {
     cache: ScrapeCache,
     packageData: PartialPackageData,
     strategy: QueryStrategy,
-  ): Promise<unknown> {
+  ): Promise<PartialClassData> {
     const { $, fullUrl } = await this.fetcher.fetch(url);
     const base = this.baseObjectScraper.scrape(
       $,

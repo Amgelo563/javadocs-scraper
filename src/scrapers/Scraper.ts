@@ -19,6 +19,7 @@ import { BaseObjectScraper } from './object/BaseObjectScraper';
 import { PackageScraper } from './package/PackageScraper';
 import { RootScraper } from './root/RootScraper';
 
+/** The entry point for the library. */
 export class Scraper {
   protected readonly fetcher: Fetcher;
 

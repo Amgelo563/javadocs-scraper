@@ -5,6 +5,7 @@ import type { PackageData } from '../entities/package/PackageData';
 import type { PartialEnumData } from '../partials/enum/PartialEnumData';
 import type { ScrapeCache } from '../scrapers/cache/ScrapeCache';
 
+/** Patches {@link PartialEnumData} to {@link EnumData}. */
 export class EnumPatcher {
   public patchEnums(
     cache: ScrapeCache,

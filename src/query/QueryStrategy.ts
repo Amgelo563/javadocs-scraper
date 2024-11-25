@@ -1,8 +1,8 @@
 import type { Cheerio, CheerioAPI } from 'cheerio';
 import type { Element } from 'domhandler';
-
 import type { DeprecationContent } from '../entities/deprecation/DeprecationContent';
 
+/** A strategy selected in runtime to query a Javadoc for a given version. */
 export interface QueryStrategy {
   queryRootTabs($root: CheerioAPI): Cheerio<Element>;
   queryPackageSignatureText($package: CheerioAPI): string;

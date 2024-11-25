@@ -3,6 +3,7 @@ import type { PackageData } from '../entities/package/PackageData';
 import type { PartialPackageData } from '../partials/package/PartialPackageData';
 import type { ScrapeCache } from '../scrapers/cache/ScrapeCache';
 
+/** Patches {@link PartialPackageData} to {@link PackageData}. */
 export class PackagePatcher {
   public patchPackages(cache: ScrapeCache): Collection<string, PackageData> {
     const packages = new Collection<string, PackageData>();

@@ -12,6 +12,7 @@ import type { ClassScraper } from '../class/ClassScraper';
 import type { EnumScraper } from '../enum/EnumScraper';
 import type { InterfaceScraper } from '../interface/InterfaceScraper';
 
+/** Scrapes data from a package URL to a {@link PartialPackageData}. */
 export class PackageScraper {
   protected readonly fetcher: Fetcher;
 

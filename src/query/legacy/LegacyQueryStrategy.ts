@@ -5,6 +5,7 @@ import type { DeprecationContent } from '../../entities/deprecation/DeprecationC
 import { TextFormatter } from '../../text/TextFormatter';
 import type { QueryStrategy } from '../QueryStrategy';
 
+/** A {@link QueryStrategy} for legacy Javadocs. */
 export class LegacyQueryStrategy implements QueryStrategy {
   /** Matches a non-breaking space character (Unicode \u00A0). */
   protected static readonly NoBreakSpaceRegex = /\xa0/;

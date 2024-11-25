@@ -6,6 +6,7 @@ import type { QueryStrategy } from '../../query/QueryStrategy';
 import type { ScrapeCache } from '../cache/ScrapeCache';
 import type { BaseObjectScraper } from '../object/BaseObjectScraper';
 
+/** Scrapes data from an interface URL to a {@link PartialInterfaceData}. */
 export class InterfaceScraper {
   protected readonly baseObjectScraper: BaseObjectScraper;
 

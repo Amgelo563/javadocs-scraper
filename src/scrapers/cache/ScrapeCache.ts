@@ -5,6 +5,7 @@ import type { PartialEnumData } from '../../partials/enum/PartialEnumData';
 import type { PartialInterfaceData } from '../../partials/interface/PartialInterfaceData';
 import type { PartialPackageData } from '../../partials/package/PartialPackageData';
 
+/** Holds cache for partially scraped data, useful to link everything together. */
 export class ScrapeCache {
   public readonly partialPackages: Collection<string, PartialPackageData> =
     new Collection();

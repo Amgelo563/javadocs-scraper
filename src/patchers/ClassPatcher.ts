@@ -5,6 +5,7 @@ import type { PackageData } from '../entities/package/PackageData';
 import type { PartialClassData } from '../partials/class/PartialClassData';
 import type { ScrapeCache } from '../scrapers/cache/ScrapeCache';
 
+/** Patches {@link PartialClassData} to {@link ClassData}. */
 export class ClassPatcher {
   public patchClasses(
     cache: ScrapeCache,

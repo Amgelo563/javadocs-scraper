@@ -9,6 +9,7 @@ import type { FieldScraper } from '../field/FieldScraper';
 import type { InheritanceScraper } from '../inheritance/InheritanceScraper';
 import type { MethodScraper } from '../method/MethodScraper';
 
+/** Scrapes shared properties among objects like name, description, etc. */
 export class BaseObjectScraper {
   /** Matches type parameters in the form Foo<T> */
   public static readonly TypeParameterTextRegex = /<(?<parameters>[^<>]*)>$/;

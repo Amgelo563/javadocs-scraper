@@ -5,6 +5,7 @@ import type { QueryStrategy } from '../../query/QueryStrategy';
 import type { ScrapeCache } from '../cache/ScrapeCache';
 import type { PackageScraper } from '../package/PackageScraper';
 
+/** The entry point for other scrapers, scraping the root page. */
 export class RootScraper {
   protected readonly fetcher: Fetcher;
 

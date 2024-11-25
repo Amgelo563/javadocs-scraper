@@ -9,6 +9,7 @@ import { EntityTypeEnum } from '../../entities/type/EntityType';
 import type { QueryStrategy } from '../../query/QueryStrategy';
 import { TextFormatter } from '../../text/TextFormatter';
 
+/** Scrapes the {@link FieldData}s from an object wrapped in a {@link CheerioAPI}. */
 export class FieldScraper {
   public scrape(
     $object: CheerioAPI,

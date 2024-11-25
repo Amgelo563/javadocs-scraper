@@ -3,6 +3,7 @@ import { load } from 'cheerio';
 import { resolve } from 'url';
 import type { Fetcher } from '../Fetcher';
 
+/** A {@link Fetcher} for online Javadocs. */
 export class OnlineFetcher implements Fetcher {
   protected readonly baseUrl: string;
 

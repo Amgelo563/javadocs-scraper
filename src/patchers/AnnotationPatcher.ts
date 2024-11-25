@@ -4,6 +4,7 @@ import type { PackageData } from '../entities/package/PackageData';
 import type { PartialAnnotationData } from '../partials/annotation/PartialAnnotationData';
 import type { ScrapeCache } from '../scrapers/cache/ScrapeCache';
 
+/** Patches {@link PartialAnnotationData} to {@link AnnotationData}. */
 export class AnnotationPatcher {
   public patchAnnotations(
     cache: ScrapeCache,
