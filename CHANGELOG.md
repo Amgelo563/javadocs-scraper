@@ -1,3 +1,10 @@
+## [1.3.0](https://github.com/Amgelo563/javadocs-scraper/compare/v1.2.0...v1.3.0) (2024-11-25)
+
+### Features
+
+* add AnnotationData[#targets](https://github.com/Amgelo563/javadocs-scraper/issues/targets) ([d60684e](https://github.com/Amgelo563/javadocs-scraper/commit/d60684e6cf21336f43761052ebfa82d85cbcb758))
+* export AnnotationElementData ([06ae72d](https://github.com/Amgelo563/javadocs-scraper/commit/06ae72d8ec9d8fd6c4c72de863298145613579af))
+
 ## [1.2.0](https://github.com/Amgelo563/javadocs-scraper/compare/v1.1.0...v1.2.0) (2024-11-16)
 
 ### Features
