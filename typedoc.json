@@ -1,13 +1,10 @@
 {
   "$schema": "https://typedoc.org/schema.json",
-  "entryPoints": ["./src/index.ts"],
+  "entryPoints": [
+    "./src/index.ts"
+  ],
   "out": "docs",
   "includeVersion": true,
-  "theme": "my-theme",
   "favicon": "assets/javadocs-scraper.ico",
-  "customTitle": "javadocs-scraper typedoc",
-  "plugin": [
-    "@mxssfd/typedoc-theme",
-    "typedoc-plugin-extras"
-  ]
+  "name": "javadocs-scraper typedoc",
 }
