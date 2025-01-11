@@ -7,7 +7,10 @@ import type { QueryStrategy } from '../QueryStrategy';
 export class QueryStrategyFactory {
   public create($root: CheerioAPI): QueryStrategy {
     const generator = $root('meta[name="generator"]').attr('content');
-    if (generator === 'javadoc/PackageIndexWriter') {
+    if (
+      generator === 'javadoc/PackageIndexWriter'
+      || generator === 'javadoc/ModuleIndexWriter'
+    ) {
       return new ModernQueryStrategy();
     }
 
