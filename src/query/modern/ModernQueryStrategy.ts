@@ -9,7 +9,9 @@ export class ModernQueryStrategy implements QueryStrategy {
     /extends\s+(?<superClasses>[^]*?)(?=\s*(implements|$))/;
 
   public queryRootTabs($root: CheerioAPI): Cheerio<Element> {
-    return $root('#all-packages-table > .summary-table > .col-first > a');
+    return $root(
+      '#all-packages-table, #package-summary-table > .summary-table > .col-first > a',
+    );
   }
 
   public queryPackageDescription($package: CheerioAPI): Cheerio<Element> {
