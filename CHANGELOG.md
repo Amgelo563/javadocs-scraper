@@ -1,3 +1,11 @@
+## [1.4.1](https://github.com/Amgelo563/javadocs-scraper/compare/v1.4.0...v1.4.1) (2025-04-21)
+
+### Bug Fixes
+
+* fix field and method querying on some legacy versions ([50ee8c9](https://github.com/Amgelo563/javadocs-scraper/commit/50ee8c9c0eb8ad2a8debea7e7d5225ff8b134c6f))
+* fix missing selectors on b9a9202 ([de8c78b](https://github.com/Amgelo563/javadocs-scraper/commit/de8c78b2e3f0083fe0d7d5980d112ba6ba71a325))
+* fix root tabs query with modern javadocs ([b9a9202](https://github.com/Amgelo563/javadocs-scraper/commit/b9a92020592211f5f46d76aa2062b37d9daba8e3))
+
 ## [1.4.0](https://github.com/Amgelo563/javadocs-scraper/compare/v1.3.0...v1.4.0) (2024-11-25)
 
 ### Features
