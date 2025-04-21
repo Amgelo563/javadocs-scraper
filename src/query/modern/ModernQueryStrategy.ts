@@ -10,7 +10,7 @@ export class ModernQueryStrategy implements QueryStrategy {
 
   public queryRootTabs($root: CheerioAPI): Cheerio<Element> {
     return $root(
-      '#all-packages-table, #package-summary-table > .summary-table > .col-first > a',
+      '#all-packages-table > .summary-table > .col-first > a, #package-summary-table > .summary-table > .col-first > a',
     );
   }
 
