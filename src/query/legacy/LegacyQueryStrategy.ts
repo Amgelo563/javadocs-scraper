@@ -128,7 +128,7 @@ export class LegacyQueryStrategy implements QueryStrategy {
   }
 
   public queryMethodPrototypeText($method: Cheerio<Element>): string {
-    return $method.find('a').attr('name') ?? '';
+    return $method.find('a').attr('name') ?? $method.find('a').attr('id') ?? '';
   }
 
   public queryMethodSignature($method: Cheerio<Element>): Cheerio<Element> {
@@ -223,7 +223,7 @@ export class LegacyQueryStrategy implements QueryStrategy {
   }
 
   public queryFieldId($field: Cheerio<Element>): string {
-    return $field.find('a').attr('name') ?? '';
+    return $field.find('a').attr('name') ?? $field.find('a').attr('id') ?? '';
   }
 
   public queryFieldModifiersText($signature: Cheerio<Element>): string {
