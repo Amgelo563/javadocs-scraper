@@ -173,11 +173,13 @@ export class LegacyQueryStrategy implements QueryStrategy {
   }
 
   public queryMethodReturnType($signature: Cheerio<Element>): string {
-    return $signature
+    const part = $signature
       .text()
-      .split(TextFormatter.NoBreakSpaceRegex)[0]
-      .split('\n')
-      .at(-1) as string;
+      .split(TextFormatter.NoBreakSpaceRegex)
+      // ['public', 'abstract', '...', 'T', 'name']
+      .at(-2);
+
+    return part?.split('\n').at(-1) ?? '';
   }
 
   public queryMemberDeprecation(
