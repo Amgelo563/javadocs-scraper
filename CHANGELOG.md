@@ -1,3 +1,9 @@
+## [1.4.2](https://github.com/Amgelo563/javadocs-scraper/compare/v1.4.1...v1.4.2) (2025-04-24)
+
+### Bug Fixes
+
+* add support for empty annotation targets (@Target({})) ([0df69bd](https://github.com/Amgelo563/javadocs-scraper/commit/0df69bd5afc9ae5565926a8b5ec00a7ade449993))
+
 ## [1.4.1](https://github.com/Amgelo563/javadocs-scraper/compare/v1.4.0...v1.4.1) (2025-04-21)
 
 ### Bug Fixes
