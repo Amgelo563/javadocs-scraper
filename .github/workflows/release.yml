@@ -6,6 +6,7 @@ permissions:
   contents: read # for checkout
   id-token: write # to enable use of OIDC for npm provenance
   packages: write # to publish a GitHub release
+  pages: write # to deploy to GitHub Pages
 
 jobs:
   release:
@@ -54,7 +55,7 @@ jobs:
           path: ./docs
 
   deploy-docs:
-    name: Deploy
+    name: Deploy New Typedoc
     runs-on: ubuntu-latest
     environment:
       name: github-pages
