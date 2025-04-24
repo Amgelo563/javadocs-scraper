@@ -124,6 +124,10 @@ export class ModernQueryStrategy implements QueryStrategy {
     return $signature.find('.return-type').text().trim();
   }
 
+  public queryAnnotationElementReturnType($element: Cheerio<Element>): string {
+    return this.queryMethodReturnType($element);
+  }
+
   public queryMemberDeprecation(
     $member: Cheerio<Element>,
   ): DeprecationContent | null {

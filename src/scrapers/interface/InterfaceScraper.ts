@@ -29,6 +29,7 @@ export class InterfaceScraper {
       fullUrl,
       packageData,
       strategy,
+      EntityTypeEnum.Interface,
     );
 
     const present = cache.partialInterfaces.get(base.qualifiedName);

@@ -1,8 +1,8 @@
 import { Collection } from '@discordjs/collection';
 import type { AnnotationElementData } from '../../entities/annotation/element/AnnotationElementData';
 import {
-  toElementTypes,
   type ElementType,
+  toElementTypes,
 } from '../../entities/annotation/element/ElementType';
 import type { RetentionPolicy } from '../../entities/annotation/retention/RetentionPolicy';
 import { toRetentionPolicy } from '../../entities/annotation/retention/RetentionPolicy';
@@ -38,6 +38,7 @@ export class AnnotationScraper {
       fullUrl,
       packageData,
       strategy,
+      EntityTypeEnum.Annotation,
     );
 
     const present = cache.partialAnnotations.get(base.qualifiedName);

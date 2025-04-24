@@ -1,6 +1,7 @@
 import { Collection } from '@discordjs/collection';
 import type { CheerioAPI } from 'cheerio';
 import type { ObjectTypeParameterData } from '../../entities/object/ObjectTypeParameterData';
+import type { EntityType } from '../../entities/type/EntityType';
 import { EntityTypeEnum } from '../../entities/type/EntityType';
 import type { Fetcher } from '../../fetch/Fetcher';
 import type { PartialPackageData } from '../../partials/package/PartialPackageData';
@@ -39,6 +40,7 @@ export class BaseObjectScraper {
     fullUrl: string,
     packageData: PartialPackageData,
     strategy: QueryStrategy,
+    expectedType: EntityType,
   ) {
     const name = $('title').text().split(' ')[0];
     const qualifiedName = `${packageData.name}.${name}`;
@@ -55,7 +57,12 @@ export class BaseObjectScraper {
       $,
       strategy,
     );
-    const methods = this.methodScraper.scrape($, fullUrl, strategy);
+    const methods = this.methodScraper.scrape(
+      $,
+      fullUrl,
+      strategy,
+      expectedType,
+    );
     const fields = this.fieldScraper.scrape($, fullUrl, strategy);
     const typeParameters = this.extractTypeParameters($, strategy);
     const deprecation = strategy.queryObjectDeprecation($);

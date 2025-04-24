@@ -32,6 +32,7 @@ export class EnumScraper {
       fullUrl,
       packageData,
       strategy,
+      EntityTypeEnum.Enum,
     );
 
     const present = cache.partialEnums.get(base.qualifiedName);

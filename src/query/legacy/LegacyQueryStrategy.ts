@@ -1,6 +1,7 @@
 import type { Cheerio, CheerioAPI } from 'cheerio';
 import { load } from 'cheerio';
 import type { Element } from 'domhandler';
+import { isAccessModifier } from '../../entities/access/AccessModifier';
 import type { DeprecationContent } from '../../entities/deprecation/DeprecationContent';
 import { TextFormatter } from '../../text/TextFormatter';
 import type { QueryStrategy } from '../QueryStrategy';
@@ -173,11 +174,22 @@ export class LegacyQueryStrategy implements QueryStrategy {
   }
 
   public queryMethodReturnType($signature: Cheerio<Element>): string {
-    return $signature
+    const parts = $signature.text().split(TextFormatter.NoBreakSpaceRegex);
+    if (isAccessModifier(parts[0])) {
+      parts.shift();
+    }
+
+    return parts[0].split('\n').at(-1) as string;
+  }
+
+  public queryAnnotationElementReturnType($element: Cheerio<Element>): string {
+    const part = $element
       .text()
-      .split(TextFormatter.NoBreakSpaceRegex)[0]
-      .split('\n')
-      .at(-1) as string;
+      .split(TextFormatter.NoBreakSpaceRegex)
+      // ['public', 'abstract', '...', 'T', 'name']
+      .at(-2);
+
+    return part?.split('\n').at(-1) ?? '';
   }
 
   public queryMemberDeprecation(

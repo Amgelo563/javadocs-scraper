@@ -32,6 +32,7 @@ export interface QueryStrategy {
   ): Cheerio<Element> | null;
   queryMethodReturnType($signature: Cheerio<Element>): string;
   queryMemberDeprecation($member: Cheerio<Element>): DeprecationContent | null;
+  queryAnnotationElementReturnType($element: Cheerio<Element>): string;
 
   queryFieldTables($object: CheerioAPI): Cheerio<Element>;
   queryFieldId($field: Cheerio<Element>): string;

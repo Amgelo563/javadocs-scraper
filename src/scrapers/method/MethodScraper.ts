@@ -10,7 +10,10 @@ import type { MethodTypeParameterData } from '../../entities/method/type/MethodT
 import type { Modifier } from '../../entities/modifier/Modifier';
 import { findModifiers } from '../../entities/modifier/Modifier';
 import type { ParameterData } from '../../entities/parameter/ParameterData';
-import { EntityTypeEnum } from '../../entities/type/EntityType';
+import {
+  type EntityType,
+  EntityTypeEnum,
+} from '../../entities/type/EntityType';
 import type { QueryStrategy } from '../../query/QueryStrategy';
 import { TextFormatter } from '../../text/TextFormatter';
 
@@ -23,6 +26,7 @@ export class MethodScraper {
     $object: CheerioAPI,
     objectUrl: string,
     strategy: QueryStrategy,
+    expectedType: EntityType,
   ): Collection<string, MethodData<null>> {
     const $methodTables = strategy.queryMethodTables($object);
     if (!$methodTables || $methodTables.length === 0) {
@@ -58,7 +62,12 @@ export class MethodScraper {
         strategy,
       );
       const deprecation = strategy.queryMemberDeprecation($method);
-      const returns = this.extractReturns($method, $signature, strategy);
+      const returns = this.extractReturns(
+        $method,
+        $signature,
+        strategy,
+        expectedType,
+      );
 
       const annotations = this.extractAnnotations(signature);
       const typeParameters = this.extractTypeParameters($method, signature);
@@ -187,8 +196,13 @@ export class MethodScraper {
     $method: Cheerio<Element>,
     $signature: Cheerio<Element>,
     strategy: QueryStrategy,
+    expectedType: EntityType,
   ): MethodReturnData {
-    const returnType = strategy.queryMethodReturnType($signature);
+    const returnType =
+      expectedType === EntityTypeEnum.Annotation
+        ? strategy.queryAnnotationElementReturnType($signature)
+        : strategy.queryMethodReturnType($signature);
+
     const $description = $method
       .find('dt:contains("Returns:")')
       .nextUntil('dt');

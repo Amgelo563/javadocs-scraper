@@ -30,6 +30,7 @@ export class ClassScraper {
       fullUrl,
       packageData,
       strategy,
+      EntityTypeEnum.Class,
     );
 
     const present = cache.partialClasses.get(base.qualifiedName);
