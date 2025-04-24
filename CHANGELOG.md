@@ -1,3 +1,13 @@
+## [1.4.4](https://github.com/Amgelo563/javadocs-scraper/compare/v1.4.3...v1.4.4) (2025-04-24)
+
+### Bug Fixes
+
+* fix annotation element and method return types ([abf9465](https://github.com/Amgelo563/javadocs-scraper/commit/abf9465e5e9c6ccd2f5a718a1e8dd41c8c175955))
+
+### Reverts
+
+* Revert "fix: fix return type for annotation elements" ([8173691](https://github.com/Amgelo563/javadocs-scraper/commit/81736918c15f7f85fd40985540c393256a68f930))
+
 ## [1.4.3](https://github.com/Amgelo563/javadocs-scraper/compare/v1.4.2...v1.4.3) (2025-04-24)
 
 ### Bug Fixes
