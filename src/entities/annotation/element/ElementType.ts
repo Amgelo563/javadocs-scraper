@@ -15,6 +15,8 @@ export const ElementTypeEnum = {
   Type: 'TYPE',
   TypeParameter: 'TYPE_PARAMETER',
   TypeUse: 'TYPE_USE',
+  /** Not an official ElementType, represents @Target({}). */
+  None: '',
 } as const;
 
 /** Union type of element types. */
