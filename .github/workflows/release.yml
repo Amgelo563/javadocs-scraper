@@ -43,3 +43,24 @@ jobs:
           HUSKY: 0
           HUSKY_SKIP_HOOKS: 1
         run: npx semantic-release
+
+      - name: Build Docs
+        run: pnpm run typedoc
+
+      - name: Upload Pages Artifact
+        uses: actions/upload-pages-artifact@v3
+        id: deployment
+        with:
+          path: ./docs
+
+  deploy-docs:
+    name: Deploy
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    needs: release
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
