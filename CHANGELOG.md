@@ -1,3 +1,9 @@
+## [1.4.5](https://github.com/Amgelo563/javadocs-scraper/compare/v1.4.4...v1.4.5) (2025-04-28)
+
+### Bug Fixes
+
+* patch present inheritance instead of ignoring, consistently use id as key ([548e0d4](https://github.com/Amgelo563/javadocs-scraper/commit/548e0d44dde32c6a4b8e09bdf9f51e4421026324))
+
 ## [1.4.4](https://github.com/Amgelo563/javadocs-scraper/compare/v1.4.3...v1.4.4) (2025-04-24)
 
 ### Bug Fixes
