@@ -113,7 +113,9 @@ export class ModernQueryStrategy implements QueryStrategy {
   }
 
   public queryMethodDescription($method: Cheerio<Element>): Cheerio<Element> {
-    return $method.find('.block');
+    return $method
+      .find('.block:not(:has(.description-from-type-label))')
+      .last();
   }
 
   public queryMethodParameters($signature: Cheerio<Element>): Cheerio<Element> {
@@ -148,7 +150,7 @@ export class ModernQueryStrategy implements QueryStrategy {
   }
 
   public queryFieldDescription($field: Cheerio<Element>): Cheerio<Element> {
-    return $field.find('.block');
+    return $field.find('.block:not(:has(.description-from-type-label))').last();
   }
 
   public queryFieldId($field: Cheerio<Element>): string {
