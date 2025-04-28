@@ -1,3 +1,9 @@
+## [1.4.6](https://github.com/Amgelo563/javadocs-scraper/compare/v1.4.5...v1.4.6) (2025-04-28)
+
+### Bug Fixes
+
+* omit "Description copied from" label from descriptions ([86b2487](https://github.com/Amgelo563/javadocs-scraper/commit/86b2487768c8d9e6917d2a7ccb577c161521a5b4))
+
 ## [1.4.5](https://github.com/Amgelo563/javadocs-scraper/compare/v1.4.4...v1.4.5) (2025-04-28)
 
 ### Bug Fixes
