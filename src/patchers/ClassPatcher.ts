@@ -67,7 +67,11 @@ export class ClassPatcher {
         }
 
         for (const method of extended.methods.values()) {
-          if (classData.methods.has(method.id)) continue;
+          const present = classData.methods.get(method.id);
+          if (present) {
+            present.inheritedFrom = extended;
+            continue;
+          }
           classData.methods.set(method.id, {
             ...method,
             inheritedFrom: extended,
@@ -75,7 +79,12 @@ export class ClassPatcher {
         }
 
         for (const field of extended.fields.values()) {
-          if (classData.fields.has(field.id)) continue;
+          const present = classData.fields.get(field.id);
+          if (present) {
+            present.inheritedFrom = extended;
+            continue;
+          }
+
           classData.fields.set(field.id, {
             ...field,
             inheritedFrom: extended,
@@ -89,7 +98,7 @@ export class ClassPatcher {
     const implementations: ClassData['implements'] = new Collection();
     for (const implementation of classData.partialImplements) {
       if (typeof implementation === 'object') {
-        implementations.set(implementation.qualifiedName, implementation);
+        implementations.set(implementation.id, implementation);
         continue;
       }
 
@@ -101,22 +110,30 @@ export class ClassPatcher {
       }
 
       for (const method of implemented.methods.values()) {
-        if (classData.methods.has(method.signature)) continue;
-        classData.methods.set(method.signature, {
+        const present = classData.methods.get(method.id);
+        if (present) {
+          present.inheritedFrom = implemented;
+          continue;
+        }
+        classData.methods.set(method.id, {
           ...method,
           inheritedFrom: implemented,
         });
       }
 
       for (const field of implemented.fields.values()) {
-        if (classData.fields.has(field.signature)) continue;
-        classData.fields.set(field.signature, {
+        const present = classData.fields.get(field.signature);
+        if (present) {
+          present.inheritedFrom = implemented;
+          continue;
+        }
+        classData.fields.set(field.id, {
           ...field,
           inheritedFrom: implemented,
         });
       }
 
-      implementations.set(implemented.qualifiedName, implemented);
+      implementations.set(implemented.id, implemented);
     }
 
     return {

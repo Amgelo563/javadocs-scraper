@@ -38,7 +38,7 @@ export class EnumPatcher {
 
     for (const implementation of enumData.partialImplements) {
       if (typeof implementation === 'object') {
-        implementations.set(implementation.qualifiedName, implementation);
+        implementations.set(implementation.id, implementation);
         continue;
       }
 
@@ -50,22 +50,26 @@ export class EnumPatcher {
       }
 
       for (const method of implemented.methods.values()) {
-        if (enumData.methods.has(method.signature)) continue;
-        enumData.methods.set(method.signature, {
+        const present = enumData.methods.get(method.id);
+        if (present) {
+          present.inheritedFrom = implemented;
+          continue;
+        }
+        enumData.methods.set(method.id, {
           ...method,
           inheritedFrom: implemented,
         });
       }
 
       for (const field of implemented.fields.values()) {
-        if (enumData.fields.has(field.signature)) continue;
-        enumData.fields.set(field.signature, {
+        if (enumData.fields.has(field.id)) continue;
+        enumData.fields.set(field.id, {
           ...field,
           inheritedFrom: implemented,
         });
       }
 
-      implementations.set(implemented.qualifiedName, implemented);
+      implementations.set(implemented.id, implemented);
     }
 
     return {

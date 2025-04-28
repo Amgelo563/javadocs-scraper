@@ -42,7 +42,7 @@ export class InterfacePatcher {
 
     for (const extension of interfaceData.partialExtends) {
       if (typeof extension === 'object') {
-        extensions.set(extension.qualifiedName, extension);
+        extensions.set(extension.id, extension);
         continue;
       }
 
@@ -65,7 +65,11 @@ export class InterfacePatcher {
       }
 
       for (const method of extended.methods.values()) {
-        if (interfaceData.methods.has(method.id)) continue;
+        const present = interfaceData.methods.get(method.id);
+        if (present) {
+          present.inheritedFrom = extended;
+          continue;
+        }
         interfaceData.methods.set(method.id, {
           ...method,
           inheritedFrom: extended,
@@ -73,13 +77,17 @@ export class InterfacePatcher {
       }
 
       for (const field of extended.fields.values()) {
-        if (interfaceData.fields.has(field.id)) continue;
+        const present = interfaceData.fields.get(field.id);
+        if (present) {
+          present.inheritedFrom = extended;
+          continue;
+        }
         interfaceData.fields.set(field.id, {
           ...field,
           inheritedFrom: extended,
         });
       }
-      extensions.set(extended.qualifiedName, extended);
+      extensions.set(extended.id, extended);
     }
 
     return {
