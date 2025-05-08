@@ -1,3 +1,9 @@
+## [1.4.7](https://github.com/Amgelo563/javadocs-scraper/compare/v1.4.6...v1.4.7) (2025-05-08)
+
+### Bug Fixes
+
+* fix annotations being included in parameter types ([dc8d4a0](https://github.com/Amgelo563/javadocs-scraper/commit/dc8d4a08ef240974d4876fcde4d6d3d8a3fc0f7b))
+
 ## [1.4.6](https://github.com/Amgelo563/javadocs-scraper/compare/v1.4.5...v1.4.6) (2025-04-28)
 
 ### Bug Fixes
