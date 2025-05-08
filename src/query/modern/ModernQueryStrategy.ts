@@ -89,7 +89,7 @@ export class ModernQueryStrategy implements QueryStrategy {
 
   public queryMethodTables($object: CheerioAPI): Cheerio<Element> {
     return $object(
-      '#method-detail > .member-list > li, .member-details > .member-list > li',
+      '#method-detail > .member-list > li, .member-details > .member-list > li, .method-details > .member-list > li',
     );
   }
 
@@ -167,7 +167,7 @@ export class ModernQueryStrategy implements QueryStrategy {
 
   public queryFieldTables($object: CheerioAPI): Cheerio<Element> {
     return $object(
-      '#field-detail > .member-list > li, #enum-constant-detail > .member-list > li',
+      '#field-detail > .member-list > li, #enum-constant-detail > .member-list > li, .field-details > .member-list > li',
     );
   }
 

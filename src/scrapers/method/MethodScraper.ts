@@ -133,21 +133,23 @@ export class MethodScraper {
         .map((part) => part.trim());
 
       for (const parameterHtml of parametersHtml) {
-        const [typeWithAnnotations, name] = parameterHtml.split('&nbsp;');
+        const text = load(parameterHtml).text();
+        const [typeWithAnnotations, name] = text.split(
+          TextFormatter.NoBreakSpace,
+        );
         const annotations: string[] = [];
 
         const parts = typeWithAnnotations.split(' ');
         /** if the part starts with @, push to annotation. otherwise break and use as type */
-        for (const [i, part] of parts.entries()) {
+        for (const part of [...parts]) {
           if (part.startsWith('@')) {
-            parts.splice(i, 1);
+            parts.splice(0, 1);
             annotations.push(part);
           } else {
             break;
           }
         }
-        const typeHtml = parts.join(' ');
-        const type = load(typeHtml).text().trim();
+        const type = parts.join(' ').trim();
         const signature = load(parameterHtml)
           .text()
           .trim()
