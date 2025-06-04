@@ -4,6 +4,14 @@ import type { PackageData } from '../entities/package/PackageData';
 import type { PartialInterfaceData } from '../partials/interface/PartialInterfaceData';
 import type { ScrapeCache } from '../scrapers/cache/ScrapeCache';
 
+type PartialWithOptionals = Omit<
+  PartialInterfaceData,
+  'partialExtends' | 'partialPackage'
+> & {
+  partialExtends?: PartialInterfaceData['partialExtends'];
+  partialPackage?: PartialInterfaceData['partialPackage'];
+};
+
 /** Patches {@link PartialInterfaceData} to {@link InterfaceData}. */
 export class InterfacePatcher {
   public patchInterfaces(
@@ -37,6 +45,7 @@ export class InterfacePatcher {
         `Package ${name} not found, but is package from interface ${name}`,
       );
     }
+    delete (interfaceData as PartialWithOptionals).partialPackage;
 
     const extensions: InterfaceData['extends'] = new Collection();
 
@@ -89,6 +98,7 @@ export class InterfacePatcher {
       }
       extensions.set(extended.id, extended);
     }
+    delete (interfaceData as PartialWithOptionals).partialExtends;
 
     return {
       ...interfaceData,

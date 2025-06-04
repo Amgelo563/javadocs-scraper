@@ -5,6 +5,14 @@ import type { PackageData } from '../entities/package/PackageData';
 import type { PartialEnumData } from '../partials/enum/PartialEnumData';
 import type { ScrapeCache } from '../scrapers/cache/ScrapeCache';
 
+type PartialWithOptionals = Omit<
+  PartialEnumData,
+  'partialImplements' | 'partialPackage'
+> & {
+  partialImplements?: PartialEnumData['partialImplements'];
+  partialPackage?: PartialEnumData['partialPackage'];
+};
+
 /** Patches {@link PartialEnumData} to {@link EnumData}. */
 export class EnumPatcher {
   public patchEnums(
@@ -33,6 +41,7 @@ export class EnumPatcher {
         `Package ${name} not found, but is package from enum ${name}`,
       );
     }
+    delete (enumData as PartialWithOptionals).partialPackage;
 
     const implementations: EnumData['implements'] = new Collection();
 
@@ -71,6 +80,7 @@ export class EnumPatcher {
 
       implementations.set(implemented.id, implemented);
     }
+    delete (enumData as PartialWithOptionals).partialImplements;
 
     return {
       ...enumData,

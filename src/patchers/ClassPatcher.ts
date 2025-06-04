@@ -5,6 +5,15 @@ import type { PackageData } from '../entities/package/PackageData';
 import type { PartialClassData } from '../partials/class/PartialClassData';
 import type { ScrapeCache } from '../scrapers/cache/ScrapeCache';
 
+type PartialWithOptionals = Omit<
+  PartialClassData,
+  'partialExtends' | 'partialImplements' | 'partialPackage'
+> & {
+  partialExtends?: PartialClassData['partialExtends'];
+  partialImplements?: PartialClassData['partialImplements'];
+  partialPackage?: PartialClassData['partialPackage'];
+};
+
 /** Patches {@link PartialClassData} to {@link ClassData}. */
 export class ClassPatcher {
   public patchClasses(
@@ -39,6 +48,7 @@ export class ClassPatcher {
         `Package ${classData.qualifiedName} not found, but is package from class ${classData.qualifiedName}`,
       );
     }
+    delete (classData as PartialWithOptionals).partialPackage;
 
     let extension: ClassData['extends'] = null;
 
@@ -94,6 +104,7 @@ export class ClassPatcher {
         extension = extended;
       }
     }
+    delete (classData as PartialWithOptionals).partialExtends;
 
     const implementations: ClassData['implements'] = new Collection();
     for (const implementation of classData.partialImplements) {
@@ -135,6 +146,7 @@ export class ClassPatcher {
 
       implementations.set(implemented.id, implemented);
     }
+    delete (classData as PartialWithOptionals).partialImplements;
 
     return {
       ...classData,

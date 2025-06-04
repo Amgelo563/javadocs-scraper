@@ -3,6 +3,13 @@ import type { PackageData } from '../entities/package/PackageData';
 import type { PartialPackageData } from '../partials/package/PartialPackageData';
 import type { ScrapeCache } from '../scrapers/cache/ScrapeCache';
 
+type PartialWithOptionals = Omit<
+  PartialPackageData,
+  'partialRelatedPackages'
+> & {
+  partialRelatedPackages?: PartialPackageData['partialRelatedPackages'];
+};
+
 /** Patches {@link PartialPackageData} to {@link PackageData}. */
 export class PackagePatcher {
   public patchPackages(cache: ScrapeCache): Collection<string, PackageData> {
@@ -27,6 +34,8 @@ export class PackagePatcher {
       }
       packageData.relatedPackages.set(related, relatedPackage);
     }
+
+    delete (packageData as PartialWithOptionals).partialRelatedPackages;
 
     return packageData;
   }

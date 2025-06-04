@@ -4,6 +4,10 @@ import type { PackageData } from '../entities/package/PackageData';
 import type { PartialAnnotationData } from '../partials/annotation/PartialAnnotationData';
 import type { ScrapeCache } from '../scrapers/cache/ScrapeCache';
 
+type PartialWithOptionals = Omit<PartialAnnotationData, 'partialPackage'> & {
+  partialPackage?: PartialAnnotationData['partialPackage'];
+};
+
 /** Patches {@link PartialAnnotationData} to {@link AnnotationData}. */
 export class AnnotationPatcher {
   public patchAnnotations(
@@ -28,6 +32,7 @@ export class AnnotationPatcher {
         `Package ${annotationData.qualifiedName} not found, but is package from annotation ${annotationData.qualifiedName}`,
       );
     }
+    delete (annotationData as PartialWithOptionals).partialPackage;
 
     return {
       ...annotationData,
