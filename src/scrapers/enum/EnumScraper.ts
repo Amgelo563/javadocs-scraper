@@ -34,6 +34,7 @@ export class EnumScraper {
       strategy,
       EntityTypeEnum.Enum,
     );
+    delete (base as { partialExtends?: unknown[] }).partialExtends;
 
     const present = cache.partialEnums.get(base.qualifiedName);
     if (present) {

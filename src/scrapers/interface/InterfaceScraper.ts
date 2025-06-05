@@ -31,6 +31,7 @@ export class InterfaceScraper {
       strategy,
       EntityTypeEnum.Interface,
     );
+    delete (base as { partialImplements?: unknown[] }).partialImplements;
 
     const present = cache.partialInterfaces.get(base.qualifiedName);
     if (present) {

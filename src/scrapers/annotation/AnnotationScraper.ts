@@ -40,6 +40,8 @@ export class AnnotationScraper {
       strategy,
       EntityTypeEnum.Annotation,
     );
+    delete (base as { partialExtends?: unknown[] }).partialExtends;
+    delete (base as { partialImplements?: unknown[] }).partialImplements;
 
     const present = cache.partialAnnotations.get(base.qualifiedName);
     if (present) {
