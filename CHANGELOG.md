@@ -1,3 +1,9 @@
+## [1.4.8](https://github.com/Amgelo563/javadocs-scraper/compare/v1.4.7...v1.4.8) (2025-06-05)
+
+### Bug Fixes
+
+* delete partial data from outputs ([ff8c6ae](https://github.com/Amgelo563/javadocs-scraper/commit/ff8c6ae1b577963486ecdfbc49190b8c1dd66b03))
+
 ## [1.4.7](https://github.com/Amgelo563/javadocs-scraper/compare/v1.4.6...v1.4.7) (2025-05-08)
 
 ### Bug Fixes
