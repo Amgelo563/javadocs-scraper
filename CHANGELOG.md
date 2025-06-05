@@ -1,3 +1,9 @@
+## [1.4.9](https://github.com/Amgelo563/javadocs-scraper/compare/v1.4.8...v1.4.9) (2025-06-05)
+
+### Bug Fixes
+
+* delete extra partials due to base object scraper ([94b9a8c](https://github.com/Amgelo563/javadocs-scraper/commit/94b9a8cc365661f83ad37ea65f0d7e715793eda4))
+
 ## [1.4.8](https://github.com/Amgelo563/javadocs-scraper/compare/v1.4.7...v1.4.8) (2025-06-05)
 
 ### Bug Fixes
