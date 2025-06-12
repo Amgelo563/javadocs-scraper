@@ -1,4 +1,5 @@
 import type { Fetcher } from '../fetch/Fetcher';
+import { FileFetcher } from '../fetch/fetchers/FileFetcher';
 import { OnlineFetcher } from '../fetch/fetchers/OnlineFetcher';
 import { Javadocs } from '../javadocs/Javadocs';
 import { AnnotationPatcher } from '../patchers/AnnotationPatcher';
@@ -63,6 +64,11 @@ export class Scraper {
   /** Creates a new {@link Scraper} from a URL. */
   public static fromURL(url: string): Scraper {
     const fetcher = new OnlineFetcher(url);
+    return Scraper.with({ fetcher });
+  }
+
+  public static fromPath(path: string): Scraper {
+    const fetcher = new FileFetcher(path);
     return Scraper.with({ fetcher });
   }
 

@@ -23,6 +23,7 @@ export * from './entities/parameter/ParameterData';
 export * from './entities/type/EntityType';
 export * from './fetch/Fetcher';
 export * from './fetch/fetchers/OnlineFetcher';
+export * from './fetch/fetchers/FileFetcher';
 export * from './javadocs/Javadocs';
 export * from './partials/annotation/PartialAnnotationData';
 export * from './partials/class/PartialClassData';
