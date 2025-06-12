@@ -92,7 +92,11 @@ export class Scraper {
       inheritanceScraper,
     });
 
-    const enumScraper = new EnumScraper(fetcher, baseObjectScraper);
+    const enumScraper = new EnumScraper(
+      fetcher,
+      baseObjectScraper,
+      fieldScraper,
+    );
     const interfaceScraper = new InterfaceScraper(fetcher, baseObjectScraper);
     const annotationScraper = new AnnotationScraper(fetcher, baseObjectScraper);
     const classScraper = new ClassScraper(fetcher, baseObjectScraper);

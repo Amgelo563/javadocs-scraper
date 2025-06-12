@@ -40,4 +40,6 @@ export interface QueryStrategy {
   queryFieldDescription($field: Cheerio<Element>): Cheerio<Element>;
   queryFieldModifiersText($signature: Cheerio<Element>): string;
   queryFieldType($signature: Cheerio<Element>, signatureText: string): string;
+
+  queryEnumConstantTables($object: CheerioAPI): Cheerio<Element>;
 }

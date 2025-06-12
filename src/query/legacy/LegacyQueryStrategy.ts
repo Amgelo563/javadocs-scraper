@@ -263,7 +263,7 @@ export class LegacyQueryStrategy implements QueryStrategy {
   public queryFieldTables($object: CheerioAPI): Cheerio<Element> {
     const h3Element = $object('h3').filter((_, el) => {
       const text = $object(el).text().trim();
-      return text === 'Field Detail' || text === 'Enum Constant Detail';
+      return text === 'Field Detail';
     });
 
     const nextSiblings = h3Element.nextAll('a, ul');
@@ -292,5 +292,45 @@ export class LegacyQueryStrategy implements QueryStrategy {
     signatureText: string,
   ): string {
     return signatureText.split(' ').at(-2) as string;
+  }
+
+  /**
+   * Legacy Javadocs don't have classes for each enum constant, instead they're in the format:
+   * ```
+   * <h3>Enum Constant Detail</h3>
+   * <a name="<prototype>"></a>
+   * <ul class="blockList">
+   *   // actual table data
+   * </ul>
+   *   // ... and so on
+   * ```
+   * Here we try to work around this issue by manipulating the HTML, adding a div
+   * that wraps each pair, and then selecting those divs.
+   */
+  public queryEnumConstantTables($object: CheerioAPI): Cheerio<Element> {
+    const h3Element = $object('h3').filter((_, el) => {
+      const text = $object(el).text().trim();
+      return text === 'Enum Constant Detail';
+    });
+
+    const nextSiblings = h3Element.nextAll('a, ul');
+
+    let currentRowHtml = "<div class='enum-constant-detail'>";
+    let rowsHtml = '';
+
+    nextSiblings.each((_i, el) => {
+      const $el = $object(el);
+      const outerHTML = $el.prop('outerHTML');
+      currentRowHtml += outerHTML;
+
+      if ($el.is('ul')) {
+        currentRowHtml += '</div>';
+        rowsHtml += currentRowHtml;
+        currentRowHtml = "<div class='enum-constant'>";
+      }
+    });
+
+    const $allElements = load(rowsHtml, undefined, false);
+    return $allElements('div.enum-constant');
   }
 }

@@ -167,11 +167,17 @@ export class ModernQueryStrategy implements QueryStrategy {
 
   public queryFieldTables($object: CheerioAPI): Cheerio<Element> {
     return $object(
-      '#field-detail > .member-list > li, #enum-constant-detail > .member-list > li, .field-details > .member-list > li',
+      '#field-detail > .member-list > li, .field-details > .member-list > li',
     );
   }
 
   public queryFieldType($signature: Cheerio<Element>): string {
     return $signature.find('.return-type').text().trim();
+  }
+
+  public queryEnumConstantTables($object: CheerioAPI): Cheerio<Element> {
+    return $object(
+      '#enum-constant-detail > .member-list > li, .enum-constant-details > .member-list > li',
+    );
   }
 }

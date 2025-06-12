@@ -7,6 +7,7 @@ import type { PartialEnumData } from '../../partials/enum/PartialEnumData';
 import type { PartialPackageData } from '../../partials/package/PartialPackageData';
 import type { QueryStrategy } from '../../query/QueryStrategy';
 import type { ScrapeCache } from '../cache/ScrapeCache';
+import type { FieldScraper } from '../field/FieldScraper';
 import type { BaseObjectScraper } from '../object/BaseObjectScraper';
 
 /** Scrapes data from an enum URL to a {@link PartialEnumData}. */
@@ -15,9 +16,16 @@ export class EnumScraper {
 
   protected readonly fetcher: Fetcher;
 
-  constructor(fetcher: Fetcher, baseObjectScraper: BaseObjectScraper) {
+  protected readonly fieldScraper: FieldScraper;
+
+  constructor(
+    fetcher: Fetcher,
+    baseObjectScraper: BaseObjectScraper,
+    fieldScraper: FieldScraper,
+  ) {
     this.fetcher = fetcher;
     this.baseObjectScraper = baseObjectScraper;
+    this.fieldScraper = fieldScraper;
   }
 
   public async scrape(
@@ -41,8 +49,16 @@ export class EnumScraper {
       return present;
     }
 
+    const constantTables = strategy.queryEnumConstantTables($);
+    const constantsAsFields = this.fieldScraper.scrape(
+      $,
+      constantTables,
+      fullUrl,
+      strategy,
+    );
+
     const constants = new Collection<string, EnumConstantData>();
-    for (const [name, field] of base.fields) {
+    for (const [name, field] of constantsAsFields) {
       const constant = this.fieldToConstant(field, constants.size);
       constants.set(name, constant);
     }

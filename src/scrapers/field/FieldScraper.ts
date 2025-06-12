@@ -1,5 +1,6 @@
 import { Collection } from '@discordjs/collection';
-import type { CheerioAPI } from 'cheerio';
+import type { Cheerio, CheerioAPI } from 'cheerio';
+import type { Element } from 'domhandler';
 import { resolve } from 'url';
 import { findAccessModifier } from '../../entities/access/AccessModifier';
 import type { FieldData } from '../../entities/field/FieldData';
@@ -13,16 +14,16 @@ import { TextFormatter } from '../../text/TextFormatter';
 export class FieldScraper {
   public scrape(
     $object: CheerioAPI,
+    $tables: Cheerio<Element>,
     objectUrl: string,
     strategy: QueryStrategy,
   ): Collection<string, FieldData<null>> {
-    const fieldTables = strategy.queryFieldTables($object);
-    if (!fieldTables || fieldTables.length === 0) {
+    if (!$tables || $tables.length === 0) {
       return new Collection();
     }
 
     const data = new Collection<string, FieldData<null>>();
-    for (const fieldTable of fieldTables) {
+    for (const fieldTable of $tables) {
       const $field = $object(fieldTable);
 
       const fieldId = strategy.queryFieldId($field);

@@ -63,7 +63,9 @@ export class BaseObjectScraper {
       strategy,
       expectedType,
     );
-    const fields = this.fieldScraper.scrape($, fullUrl, strategy);
+    const $fieldTables = strategy.queryFieldTables($);
+    const fields = this.fieldScraper.scrape($, $fieldTables, fullUrl, strategy);
+
     const typeParameters = this.extractTypeParameters($, strategy);
     const deprecation = strategy.queryObjectDeprecation($);
 
