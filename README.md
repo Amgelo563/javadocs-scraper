@@ -51,7 +51,11 @@ pnpm add javadocs-scraper
 ```ts
 import { Scraper } from 'javadocs-scraper';
 
+// From an online URL:
 const scraper = Scraper.fromURL('https://...');
+
+// From a local path:
+const scraper = Scraper.fromPath('./path/to/javadocs/index.html');
 ```
 
 > [!NOTE]
