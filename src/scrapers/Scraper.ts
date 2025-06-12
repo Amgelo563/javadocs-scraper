@@ -67,6 +67,7 @@ export class Scraper {
     return Scraper.with({ fetcher });
   }
 
+  /** Creates a new {@link Scraper} from a local file path. */
   public static fromPath(path: string): Scraper {
     const fetcher = new FileFetcher(path);
     return Scraper.with({ fetcher });
