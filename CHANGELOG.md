@@ -1,3 +1,14 @@
+## [1.5.0](https://github.com/Amgelo563/javadocs-scraper/compare/v1.4.9...v1.5.0) (2025-06-26)
+
+### Features
+
+* add FileFetcher ([6d0bf55](https://github.com/Amgelo563/javadocs-scraper/commit/6d0bf554dd83362dc7c84a3c4a46aab157705ae5))
+
+### Bug Fixes
+
+* omit extra fields from parameters in enum constants ([d37ced9](https://github.com/Amgelo563/javadocs-scraper/commit/d37ced9e9f68b06ce3b24ccaa756b285fc917d67))
+* scrape enum fields and constants separately ([c922aab](https://github.com/Amgelo563/javadocs-scraper/commit/c922aabd7d9d681df9d6002e5b96d5a180b7a499))
+
 ## [1.4.9](https://github.com/Amgelo563/javadocs-scraper/compare/v1.4.8...v1.4.9) (2025-06-05)
 
 ### Bug Fixes
