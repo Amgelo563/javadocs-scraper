@@ -80,8 +80,13 @@ export class EnumScraper {
     index: number,
   ): EnumConstantData {
     return {
-      ...parameter,
       entityType: EntityTypeEnum.EnumConstant,
+      id: parameter.id,
+      name: parameter.name,
+      description: parameter.description,
+      signature: parameter.signature,
+      url: parameter.url,
+      deprecation: parameter.deprecation,
       /** there are two kinds of errors, off by one errors */
       ordinal: index + 1,
     };
