@@ -63,7 +63,7 @@ const scraper = Scraper.fromPath('./path/to/javadocs/index.html');
 >
 > You can also instantiate `Scraper` with the `new` keyword, but you'll need to specify every dependency manually.
 >
-> The easier way is to use the `Scraper.fromURL()` method, which will use the default implementations.
+> The easier way is to use the static `fromX` methods, which will use the default implementations.
 
 > [!TIP]
 > Alternatively, you can provide your own `Fetcher` to fetch data from the Javadocs:
