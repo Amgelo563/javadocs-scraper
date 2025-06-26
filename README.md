@@ -78,13 +78,26 @@ const scraper = Scraper.fromPath('./path/to/javadocs/index.html');
 > const scraper = Scraper.with({ fetcher: myFetcher });
 > ```
 
-3. Use the `Scraper` to scrape information:
+3. Use the `Scraper` to scrape and the resulting `Javadocs` to access the data:
 
 ```ts
 const javadocs: Javadocs = await scraper.scrape();
 
 /** for example */
 const myInterface = javadocs.getInterface('org.example.Interface');
+console.log(myInterface);
+/**
+ * {
+ *   qualifiedName: 'org.example.Interface',
+ *   package: { name: 'org.example', ... },
+ *   url: 'https://.../Interface.html',
+ *   description: { text: 'An example interface', html: '<p>An example interface</p>' },
+ *   methods: Collection {...}
+ *   fields: Collection {...},
+ *   typeParameters: Collection {...},
+ *   // and more data, check the docs!
+ * }
+ */
 ```
 
 > [!TIP]
