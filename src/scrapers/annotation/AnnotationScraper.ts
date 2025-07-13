@@ -67,24 +67,24 @@ export class AnnotationScraper {
       elements.set(data.id, data);
     }
 
+    const data: PartialAnnotationData = {
+      entityType: EntityTypeEnum.Annotation,
+      id: base.qualifiedName,
+      name: base.name,
+      description: base.description,
+      signature: base.signature,
+      partialPackage: packageData,
+      url: base.url,
+      qualifiedName: base.qualifiedName,
+      deprecation: base.deprecation,
+      target: null,
+      targets: [],
+      retention: null,
+      elements,
+    };
+
     const annotationsString = base.signature.split('public')[0]?.trim();
     if (!annotationsString) {
-      const data: PartialAnnotationData = {
-        entityType: EntityTypeEnum.Annotation,
-        id: base.qualifiedName,
-        name: base.name,
-        description: base.description,
-        signature: base.signature,
-        partialPackage: packageData,
-        url: base.url,
-        qualifiedName: base.qualifiedName,
-        deprecation: base.deprecation,
-        target: null,
-        targets: [],
-        retention: null,
-        elements,
-      };
-
       cache.partialAnnotations.set(data.id, data);
       return data;
     }
@@ -124,15 +124,9 @@ export class AnnotationScraper {
       }
     }
 
-    const data: PartialAnnotationData = {
-      ...base,
-      entityType: EntityTypeEnum.Annotation,
-      targets: targets ?? [],
-      target: targets?.[0] ?? null,
-      retention,
-      elements,
-      id: base.qualifiedName,
-    };
+    data.retention = retention ?? null;
+    data.targets = targets ?? [];
+    data.target = targets?.[0] ?? null;
 
     cache.partialAnnotations.set(data.id, data);
     return data;
