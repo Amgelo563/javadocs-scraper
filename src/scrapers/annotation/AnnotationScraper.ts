@@ -51,10 +51,17 @@ export class AnnotationScraper {
     const elements: Collection<string, AnnotationElementData> =
       new Collection();
     for (const method of base.methods.values()) {
-      const data = {
-        ...method,
+      const data: AnnotationElementData = {
         entityType: EntityTypeEnum.AnnotationElement,
         id: method.name,
+        name: method.name,
+        description: method.description,
+        signature: method.signature,
+        url: method.url,
+        returns: method.returns,
+        modifiers: method.modifiers,
+        deprecation: method.deprecation,
+        annotations: method.annotations,
       };
 
       elements.set(data.id, data);
@@ -63,13 +70,19 @@ export class AnnotationScraper {
     const annotationsString = base.signature.split('public')[0]?.trim();
     if (!annotationsString) {
       const data: PartialAnnotationData = {
-        ...base,
         entityType: EntityTypeEnum.Annotation,
+        id: base.qualifiedName,
+        name: base.name,
+        description: base.description,
+        signature: base.signature,
+        partialPackage: packageData,
+        url: base.url,
+        qualifiedName: base.qualifiedName,
+        deprecation: base.deprecation,
         target: null,
         targets: [],
         retention: null,
         elements,
-        id: base.qualifiedName,
       };
 
       cache.partialAnnotations.set(data.id, data);
