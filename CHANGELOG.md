@@ -1,3 +1,9 @@
+## [1.5.1](https://github.com/Amgelo563/javadocs-scraper/compare/v1.5.0...v1.5.1) (2025-07-13)
+
+### Bug Fixes
+
+* omit extra fields from annotations ([84b58d6](https://github.com/Amgelo563/javadocs-scraper/commit/84b58d6484b53e11a66c9047958d540fa1067069))
+
 ## [1.5.0](https://github.com/Amgelo563/javadocs-scraper/compare/v1.4.9...v1.5.0) (2025-06-26)
 
 ### Features
