@@ -6,6 +6,7 @@ import { EntityTypeEnum } from '../../entities/type/EntityType';
 import type { Fetcher } from '../../fetch/Fetcher';
 import type { PartialPackageData } from '../../partials/package/PartialPackageData';
 import type { QueryStrategy } from '../../query/QueryStrategy';
+import { TextFormatter } from '../../text/TextFormatter';
 import type { FieldScraper } from '../field/FieldScraper';
 import type { InheritanceScraper } from '../inheritance/InheritanceScraper';
 import type { MethodScraper } from '../method/MethodScraper';
@@ -46,7 +47,7 @@ export class BaseObjectScraper {
     const qualifiedName = `${packageData.name}.${name}`;
 
     const $signature = strategy.queryObjectSignature($);
-    const signature = $signature.text().replaceAll('\n', ' ');
+    const signature = TextFormatter.stripWhitespaceInline($signature.text());
 
     const $description = strategy.queryObjectDescription($);
     const descriptionHtml = $description.html();
