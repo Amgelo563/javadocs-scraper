@@ -82,10 +82,14 @@ export class EnumPatcher {
     }
     delete (enumData as PartialWithOptionals).partialImplements;
 
-    return {
+    const fullyPatched: EnumData = {
       ...enumData,
       package: enumPackage,
       implements: implementations,
     };
+
+    enumPackage.enums.set(fullyPatched.id, fullyPatched);
+
+    return fullyPatched;
   }
 }

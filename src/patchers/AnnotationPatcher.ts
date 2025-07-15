@@ -34,9 +34,13 @@ export class AnnotationPatcher {
     }
     delete (annotationData as PartialWithOptionals).partialPackage;
 
-    return {
+    const fullyPatched: AnnotationData = {
       ...annotationData,
       package: packageData,
     };
+
+    packageData.annotations.set(fullyPatched.id, fullyPatched);
+
+    return fullyPatched;
   }
 }

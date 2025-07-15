@@ -100,10 +100,14 @@ export class InterfacePatcher {
     }
     delete (interfaceData as PartialWithOptionals).partialExtends;
 
-    return {
+    const fullyPatched: InterfaceData = {
       ...interfaceData,
       package: interfacePackage,
       extends: extensions,
     };
+
+    interfacePackage.interfaces.set(fullyPatched.id, fullyPatched);
+
+    return fullyPatched;
   }
 }

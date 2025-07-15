@@ -148,11 +148,15 @@ export class ClassPatcher {
     }
     delete (classData as PartialWithOptionals).partialImplements;
 
-    return {
+    const fullyPatched: ClassData = {
       ...classData,
       package: packageData,
       extends: extension,
       implements: implementations,
     };
+
+    packageData.classes.set(fullyPatched.id, fullyPatched);
+
+    return fullyPatched;
   }
 }
