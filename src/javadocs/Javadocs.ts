@@ -1,3 +1,4 @@
+import type { Collection } from '@discordjs/collection';
 import type { AnnotationData } from '../entities/annotation/AnnotationData';
 import type { ClassData } from '../entities/class/ClassData';
 import type { EnumData } from '../entities/enum/EnumData';
@@ -6,22 +7,22 @@ import type { PackageData } from '../entities/package/PackageData';
 
 /** Holds the result of a scraped Javadocs. */
 export class Javadocs {
-  protected readonly classes: Map<string, ClassData>;
+  protected readonly classes: Collection<string, ClassData>;
 
-  protected readonly packages: Map<string, PackageData>;
+  protected readonly packages: Collection<string, PackageData>;
 
-  protected readonly enums: Map<string, EnumData>;
+  protected readonly enums: Collection<string, EnumData>;
 
-  protected readonly interfaces: Map<string, InterfaceData>;
+  protected readonly interfaces: Collection<string, InterfaceData>;
 
-  protected readonly annotations: Map<string, AnnotationData>;
+  protected readonly annotations: Collection<string, AnnotationData>;
 
   constructor(data: {
-    classes: Map<string, ClassData>;
-    packages: Map<string, PackageData>;
-    enums: Map<string, EnumData>;
-    interfaces: Map<string, InterfaceData>;
-    annotations: Map<string, AnnotationData>;
+    classes: Collection<string, ClassData>;
+    packages: Collection<string, PackageData>;
+    enums: Collection<string, EnumData>;
+    interfaces: Collection<string, InterfaceData>;
+    annotations: Collection<string, AnnotationData>;
   }) {
     this.classes = data.classes;
     this.packages = data.packages;
@@ -66,27 +67,27 @@ export class Javadocs {
   }
 
   /** Returns all the classes in the Javadocs. */
-  public getClasses(): Map<string, ClassData> {
+  public getClasses(): Collection<string, ClassData> {
     return this.classes;
   }
 
   /** Returns all the packages in the Javadocs. */
-  public getPackages(): Map<string, PackageData> {
+  public getPackages(): Collection<string, PackageData> {
     return this.packages;
   }
 
   /** Returns all the enums in the Javadocs. */
-  public getEnums(): Map<string, EnumData> {
+  public getEnums(): Collection<string, EnumData> {
     return this.enums;
   }
 
   /** Returns all the interfaces in the Javadocs. */
-  public getInterfaces(): Map<string, InterfaceData> {
+  public getInterfaces(): Collection<string, InterfaceData> {
     return this.interfaces;
   }
 
   /** Returns all the annotations in the Javadocs. */
-  public getAnnotations(): Map<string, AnnotationData> {
+  public getAnnotations(): Collection<string, AnnotationData> {
     return this.annotations;
   }
 }
