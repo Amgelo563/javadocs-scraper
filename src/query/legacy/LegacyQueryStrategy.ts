@@ -62,7 +62,7 @@ export class LegacyQueryStrategy implements QueryStrategy {
 
   public queryExtensionsWithTypesHtml($object: CheerioAPI): string | null {
     const extendsHtml = $object(
-      '.description > .blockList > .blockList > pre',
+      '.description > .blockList > .blockList > pre, .description > pre',
     ).html();
     if (!extendsHtml || !extendsHtml.length) {
       return null;
