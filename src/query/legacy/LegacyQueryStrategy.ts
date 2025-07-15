@@ -55,7 +55,9 @@ export class LegacyQueryStrategy implements QueryStrategy {
   }
 
   public queryObjectDescription($object: CheerioAPI): Cheerio<Element> {
-    return $object('.description > .blockList > .blockList > .block');
+    return $object(
+      '.description > .blockList > .blockList > .block, .description > .block',
+    );
   }
 
   public queryExtensionsWithTypesHtml($object: CheerioAPI): string | null {
