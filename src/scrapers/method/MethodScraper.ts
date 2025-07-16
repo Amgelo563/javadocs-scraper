@@ -43,8 +43,12 @@ export class MethodScraper {
       }
       const url = urlResolve(objectUrl, `#${prototype}`);
 
-      // thanks to legacy, where the prototype is in the form of `name-parameters-` instead of `name(parameters)`
-      const patchedPrototype = prototype.replace('-', '(').replace('-', ')');
+      // thanks to legacy, where the prototype is in the form of `name-parameterA-parameterB-` instead of `name(parameterA, parameterB)`
+      // replace the first dash with (, replace all other dashes with commas, remove the last character (a dash) and add )
+      const patchedPrototype = `${prototype
+        .replace('-', '(')
+        .replaceAll('-', ',')
+        .substring(0, prototype.length - 1)})`;
 
       const $signature = strategy.queryMethodSignature($method);
       const signature = TextFormatter.stripWhitespaceInline($signature.text());
