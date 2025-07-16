@@ -43,6 +43,9 @@ export class MethodScraper {
       }
       const url = urlResolve(objectUrl, `#${prototype}`);
 
+      // thanks to legacy, where the prototype is in the form of `name-parameters-` instead of `name(parameters)`
+      const patchedPrototype = prototype.replace('-', '(').replace('-', ')');
+
       const $signature = strategy.queryMethodSignature($method);
       const signature = TextFormatter.stripWhitespaceInline($signature.text());
 
@@ -88,13 +91,13 @@ export class MethodScraper {
         annotations,
         typeParameters,
         accessModifier,
-        id: prototype,
+        id: patchedPrototype,
         inheritedFrom: null,
-        prototype,
+        prototype: patchedPrototype,
         deprecation,
       };
 
-      data.set(prototype, method);
+      data.set(patchedPrototype, method);
     }
 
     return data;
