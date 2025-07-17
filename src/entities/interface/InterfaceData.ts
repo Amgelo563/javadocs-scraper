@@ -25,6 +25,7 @@ export interface InterfaceData
   methods: Collection<string, MethodData<InterfaceData | null>>;
   /** The interface' fields, keyed by their {@link FieldData#name}. */
   fields: Collection<string, FieldData<InterfaceData | null>>;
+  /** The interface's type parameters, keyed by their {@link ObjectTypeParameterData#name}. */
   typeParameters: Collection<string, ObjectTypeParameterData>;
   /**
    * The interface's deprecation notice, if any.
