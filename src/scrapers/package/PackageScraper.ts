@@ -1,11 +1,11 @@
 import { Collection } from '@discordjs/collection';
 import type { CheerioAPI } from 'cheerio';
-import { resolve as urlResolve } from 'node:url';
+import { resolve as urlResolve } from 'url';
 
 import { EntityTypeEnum, toEntityType } from '../../entities/type/EntityType';
 import type { Fetcher } from '../../fetch/Fetcher';
 import type { PartialPackageData } from '../../partials/package/PartialPackageData';
-import type { QueryStrategy } from '../../query/QueryStrategy';
+import type { QueryStrategyBundle } from '../../query/bundle/QueryStrategyBundle';
 import type { AnnotationScraper } from '../annotation/AnnotationScraper';
 import type { ScrapeCache } from '../cache/ScrapeCache';
 import type { ClassScraper } from '../class/ClassScraper';
@@ -41,28 +41,34 @@ export class PackageScraper {
   public async scrape(
     url: string,
     cache: ScrapeCache,
-    strategy: QueryStrategy,
+    strategyBundle: QueryStrategyBundle,
   ): Promise<PartialPackageData> {
     const { $, fullUrl } = await this.fetcher.fetch(url);
 
-    const signature = strategy.queryPackageSignatureText($);
+    const signature =
+      strategyBundle.packageStrategy.queryPackageSignatureText($);
     const name = signature.split(' ')[1].trim();
 
-    const $description = strategy.queryPackageDescription($);
+    const $description =
+      strategyBundle.packageStrategy.queryPackageDescription($);
     const descriptionHtml = $description.html()?.trim() ?? null;
     const description = $description.text()?.trim() ?? null;
+    const descriptionObject =
+      description || descriptionHtml
+        ? {
+            html: descriptionHtml,
+            text: description,
+          }
+        : null;
 
-    const relatedPackages = this.findRelatedPackages($, strategy);
+    const relatedPackages = this.findRelatedPackages($, strategyBundle);
     const subpackageName = name.split('.').at(-1) as string;
 
     const data: PartialPackageData = {
       entityType: EntityTypeEnum.Package,
       id: name,
       name,
-      description: {
-        text: description,
-        html: descriptionHtml,
-      },
+      description: descriptionObject,
       signature,
       url: fullUrl,
       subpackageName,
@@ -74,7 +80,7 @@ export class PackageScraper {
       annotations: new Collection(),
     };
 
-    await this.scrapeContents($, cache, data, strategy);
+    await this.scrapeContents($, cache, data, strategyBundle);
 
     cache.partialPackages.set(data.id, data);
 
@@ -83,9 +89,10 @@ export class PackageScraper {
 
   protected findRelatedPackages(
     $: CheerioAPI,
-    strategy: QueryStrategy,
+    strategyBundle: QueryStrategyBundle,
   ): string[] {
-    const relatedPackagesHtml = strategy.queryRelatedPackages($);
+    const relatedPackagesHtml =
+      strategyBundle.packageStrategy.queryRelatedPackages($);
     if (!relatedPackagesHtml || relatedPackagesHtml.length === 0) {
       return [];
     }
@@ -108,9 +115,9 @@ export class PackageScraper {
     $: CheerioAPI,
     cache: ScrapeCache,
     packageData: PartialPackageData,
-    strategy: QueryStrategy,
+    strategyBundle: QueryStrategyBundle,
   ): Promise<void> {
-    const contents = strategy.queryPackageContents($);
+    const contents = strategyBundle.packageStrategy.queryPackageContents($);
 
     for (const contentElement of contents) {
       const cheerioElement = $(contentElement);
@@ -134,13 +141,18 @@ export class PackageScraper {
             fullURL,
             cache,
             packageData,
-            strategy,
+            strategyBundle,
           );
           break;
         }
 
         case EntityTypeEnum.Enum: {
-          await this.enumScraper.scrape(fullURL, cache, packageData, strategy);
+          await this.enumScraper.scrape(
+            fullURL,
+            cache,
+            packageData,
+            strategyBundle,
+          );
           break;
         }
 
@@ -149,13 +161,18 @@ export class PackageScraper {
             fullURL,
             cache,
             packageData,
-            strategy,
+            strategyBundle,
           );
           break;
         }
 
         case EntityTypeEnum.Class: {
-          await this.classScraper.scrape(fullURL, cache, packageData, strategy);
+          await this.classScraper.scrape(
+            fullURL,
+            cache,
+            packageData,
+            strategyBundle,
+          );
           break;
         }
 

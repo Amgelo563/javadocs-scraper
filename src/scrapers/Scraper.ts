@@ -7,7 +7,8 @@ import { ClassPatcher } from '../patchers/ClassPatcher';
 import { EnumPatcher } from '../patchers/EnumPatcher';
 import { InterfacePatcher } from '../patchers/InterfacePatcher';
 import { PackagePatcher } from '../patchers/PackagePatcher';
-import { QueryStrategyFactory } from '../query/factory/QueryStrategyFactory';
+import type { QueryStrategyBundleFactory } from '../query/bundle/QueryStrategyBundle';
+import { defaultQueryStrategyBundleFactory } from '../query/bundle/QueryStrategyBundle';
 import { AnnotationScraper } from './annotation/AnnotationScraper';
 import { ScrapeCache } from './cache/ScrapeCache';
 import { ClassScraper } from './class/ClassScraper';
@@ -38,7 +39,7 @@ export class Scraper {
 
   protected readonly scrapeCache = new ScrapeCache();
 
-  protected readonly queryStrategyFactory: QueryStrategyFactory;
+  protected readonly strategyBundleFactory: QueryStrategyBundleFactory;
 
   constructor(options: {
     fetcher: Fetcher;
@@ -49,7 +50,7 @@ export class Scraper {
     enumPatcher: EnumPatcher;
     classPatcher: ClassPatcher;
     annotationPatcher: AnnotationPatcher;
-    queryStrategyFactory: QueryStrategyFactory;
+    strategyBundleFactory: QueryStrategyBundleFactory;
   }) {
     this.fetcher = options.fetcher;
     this.rootScraper = options.rootScraper;
@@ -58,7 +59,7 @@ export class Scraper {
     this.enumPatcher = options.enumPatcher;
     this.classPatcher = options.classPatcher;
     this.annotationPatcher = options.annotationPatcher;
-    this.queryStrategyFactory = options.queryStrategyFactory;
+    this.strategyBundleFactory = options.strategyBundleFactory;
   }
 
   /** Creates a new {@link Scraper} from a URL. */
@@ -73,14 +74,14 @@ export class Scraper {
     return Scraper.with({ fetcher });
   }
 
-  /** Creates a new {@link Scraper} with a {@link Fetcher} and optional {@link QueryStrategyFactory}. */
+  /** Creates a new {@link Scraper} with a {@link Fetcher} and optional {@link QueryStrategyBundleFactory}. */
   public static with(options: {
     fetcher: Fetcher;
-    queryStrategyFactory?: QueryStrategyFactory;
+    strategyBundleFactory?: QueryStrategyBundleFactory;
   }): Scraper {
     const fetcher = options.fetcher;
-    const queryStrategyFactory =
-      options.queryStrategyFactory ?? new QueryStrategyFactory();
+    const strategyBundleFactory =
+      options.strategyBundleFactory ?? defaultQueryStrategyBundleFactory;
 
     const methodScraper = new MethodScraper();
     const fieldScraper = new FieldScraper();
@@ -125,15 +126,15 @@ export class Scraper {
       enumPatcher,
       classPatcher,
       annotationPatcher,
-      queryStrategyFactory,
+      strategyBundleFactory,
     });
   }
 
   public async scrape() {
     const { $: $root } = await this.fetcher.fetchRoot();
-    const queryStrategy = this.queryStrategyFactory.create($root);
+    const strategyBundle = this.strategyBundleFactory($root);
 
-    await this.rootScraper.scrape(this.scrapeCache, queryStrategy, $root);
+    await this.rootScraper.scrape(this.scrapeCache, strategyBundle, $root);
 
     const packages = this.packagePatcher.patchPackages(this.scrapeCache);
     const interfaces = this.interfacePatcher.patchInterfaces(

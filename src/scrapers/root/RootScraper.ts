@@ -1,7 +1,7 @@
 import type { CheerioAPI } from 'cheerio';
 import type { Fetcher } from '../../fetch/Fetcher';
 import type { PartialPackageData } from '../../partials/package/PartialPackageData';
-import type { QueryStrategy } from '../../query/QueryStrategy';
+import type { QueryStrategyBundle } from '../../query/bundle/QueryStrategyBundle';
 import type { ScrapeCache } from '../cache/ScrapeCache';
 import type { PackageScraper } from '../package/PackageScraper';
 
@@ -18,10 +18,10 @@ export class RootScraper {
 
   public async scrape(
     cache: ScrapeCache,
-    queryStrategy: QueryStrategy,
+    strategyBundle: QueryStrategyBundle,
     $: CheerioAPI,
   ): Promise<Map<string, PartialPackageData>> {
-    const tabs = queryStrategy.queryRootTabs($);
+    const tabs = strategyBundle.packageStrategy.queryRootTabs($);
     const scrapingPromises: Promise<PartialPackageData>[] = [];
 
     tabs.each((_index, element) => {
@@ -31,7 +31,7 @@ export class RootScraper {
       }
 
       scrapingPromises.push(
-        this.packageScraper.scrape(url, cache, queryStrategy),
+        this.packageScraper.scrape(url, cache, strategyBundle),
       );
     });
 

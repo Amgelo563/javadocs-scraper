@@ -3,7 +3,7 @@ import { EntityTypeEnum } from '../../entities/type/EntityType';
 import type { Fetcher } from '../../fetch/Fetcher';
 import type { PartialClassData } from '../../partials/class/PartialClassData';
 import type { PartialPackageData } from '../../partials/package/PartialPackageData';
-import type { QueryStrategy } from '../../query/QueryStrategy';
+import type { QueryStrategyBundle } from '../../query/bundle/QueryStrategyBundle';
 import type { ScrapeCache } from '../cache/ScrapeCache';
 import type { BaseObjectScraper } from '../object/BaseObjectScraper';
 
@@ -22,14 +22,14 @@ export class ClassScraper {
     url: string,
     cache: ScrapeCache,
     packageData: PartialPackageData,
-    strategy: QueryStrategy,
+    strategyBundle: QueryStrategyBundle,
   ): Promise<PartialClassData> {
     const { $, fullUrl } = await this.fetcher.fetch(url);
     const base = this.baseObjectScraper.scrape(
       $,
       fullUrl,
       packageData,
-      strategy,
+      strategyBundle,
       EntityTypeEnum.Class,
     );
 

@@ -3,7 +3,7 @@ import { load } from 'cheerio';
 import type { Element } from 'domhandler';
 import type { ExternalEntityData } from '../../entities/external/ExternalEntityData';
 import { EntityTypeEnum } from '../../entities/type/EntityType';
-import type { QueryStrategy } from '../../query/QueryStrategy';
+import type { ObjectQueryStrategy } from '../../query/object/ObjectQueryStrategy';
 
 /** Scrapes the extensions and implementations from an object wrapped in a {@link CheerioAPI}. */
 export class InheritanceScraper {
@@ -11,9 +11,10 @@ export class InheritanceScraper {
 
   public scrapeExtensions(
     $: CheerioAPI,
-    strategy: QueryStrategy,
+    objectStrategy: ObjectQueryStrategy,
   ): (string | ExternalEntityData)[] {
-    const extensionsWithTypesHtml = strategy.queryExtensionsWithTypesHtml($);
+    const extensionsWithTypesHtml =
+      objectStrategy.queryExtensionsWithTypesHtml($);
 
     /** strip type parameters within extensions */
     const extendsElementsHtml = extensionsWithTypesHtml
@@ -31,11 +32,11 @@ export class InheritanceScraper {
 
   public scrapeImplementations(
     $: CheerioAPI,
-    strategy: QueryStrategy,
+    objectStrategy: ObjectQueryStrategy,
   ): (string | ExternalEntityData)[] {
     const implementations: (string | ExternalEntityData)[] = [];
     const implementsWithTypesHtml =
-      strategy.queryImplementationsWithTypesHtml($);
+      objectStrategy.queryImplementationsWithTypesHtml($);
 
     const implementsElementsHtml = implementsWithTypesHtml
       ?.replaceAll(InheritanceScraper.TypeParameterHtmlRegex, '')

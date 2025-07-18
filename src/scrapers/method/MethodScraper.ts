@@ -14,7 +14,8 @@ import {
   type EntityType,
   EntityTypeEnum,
 } from '../../entities/type/EntityType';
-import type { QueryStrategy } from '../../query/QueryStrategy';
+import type { AnnotationQueryStrategy } from '../../query/annotation/AnnotationQueryStrategy';
+import type { MethodQueryStrategy } from '../../query/method/MethodQueryStrategy';
 import { TextFormatter } from '../../text/TextFormatter';
 
 /** Scrapes the {@link MethodData}s from an object wrapped in a {@link CheerioAPI}. */
@@ -25,10 +26,11 @@ export class MethodScraper {
   public scrape(
     $object: CheerioAPI,
     objectUrl: string,
-    strategy: QueryStrategy,
+    methodStrategy: MethodQueryStrategy,
+    annotationStrategy: AnnotationQueryStrategy,
     expectedType: EntityType,
   ): Collection<string, MethodData<null>> {
-    const $methodTables = strategy.queryMethodTables($object);
+    const $methodTables = methodStrategy.queryMethodTables($object);
     if (!$methodTables || $methodTables.length === 0) {
       return new Collection();
     }
@@ -37,7 +39,7 @@ export class MethodScraper {
     for (const $methodTable of $methodTables) {
       const $method = $object($methodTable);
 
-      const prototype = strategy.queryMethodPrototypeText($method);
+      const prototype = methodStrategy.queryMethodPrototypeText($method);
       if (!prototype) {
         throw new Error(`Method prototype not found for ${$method.text()}`);
       }
@@ -50,14 +52,14 @@ export class MethodScraper {
         .replaceAll('-', ',')
         .substring(0, prototype.length - 1)})`;
 
-      const $signature = strategy.queryMethodSignature($method);
+      const $signature = methodStrategy.queryMethodSignature($method);
       const signature = TextFormatter.stripWhitespaceInline($signature.text());
 
-      const modifiersText = strategy.queryMethodModifiersText($signature);
+      const modifiersText = methodStrategy.queryMethodModifiersText($signature);
       const modifiers: Modifier[] = findModifiers(modifiersText);
 
-      const name = strategy.queryMethodNameText($method, $signature);
-      const $description = strategy.queryMethodDescription($method);
+      const name = methodStrategy.queryMethodNameText($method, $signature);
+      const $description = methodStrategy.queryMethodDescription($method);
       const description = $description.text().trim() ?? null;
       const descriptionHtml = $description.html()?.trim() ?? description;
 
@@ -66,13 +68,14 @@ export class MethodScraper {
         $method,
         $signature,
         signature,
-        strategy,
+        methodStrategy,
       );
-      const deprecation = strategy.queryMemberDeprecation($method);
+      const deprecation = methodStrategy.queryMethodDeprecation($method);
       const returns = this.extractReturns(
         $method,
         $signature,
-        strategy,
+        methodStrategy,
+        annotationStrategy,
         expectedType,
       );
 
@@ -112,9 +115,9 @@ export class MethodScraper {
     $method: Cheerio<Element>,
     $signature: Cheerio<Element>,
     sanitizedSignature: string,
-    strategy: QueryStrategy,
+    methodStrategy: MethodQueryStrategy,
   ): Collection<string, ParameterData> {
-    const $parameters = strategy.queryMethodParameters(
+    const $parameters = methodStrategy.queryMethodParameters(
       $signature,
       sanitizedSignature,
     );
@@ -191,11 +194,13 @@ export class MethodScraper {
           );
           return;
         }
-
-        parameter.description = {
-          text: description,
-          html: descriptionHtml,
-        };
+        parameter.description =
+          descriptionHtml || description
+            ? {
+                text: description,
+                html: descriptionHtml,
+              }
+            : null;
       });
 
     return datas;
@@ -204,27 +209,32 @@ export class MethodScraper {
   protected extractReturns(
     $method: Cheerio<Element>,
     $signature: Cheerio<Element>,
-    strategy: QueryStrategy,
+    methodStrategy: MethodQueryStrategy,
+    annotationStrategy: AnnotationQueryStrategy,
     expectedType: EntityType,
   ): MethodReturnData {
     const returnType =
       expectedType === EntityTypeEnum.Annotation
-        ? strategy.queryAnnotationElementReturnType($signature)
-        : strategy.queryMethodReturnType($signature);
+        ? annotationStrategy.queryAnnotationElementReturnType($signature)
+        : methodStrategy.queryMethodReturnType($signature);
 
     const $description = $method
       .find('dt:contains("Returns:")')
       .nextUntil('dt');
-    const descriptionHtml = $description.html()?.trim() ?? null;
     const description = $description.text()?.trim() ?? null;
+    const descriptionHtml = $description.html()?.trim() ?? description ?? null;
+    const descriptionObject =
+      description || descriptionHtml
+        ? {
+            text: description,
+            html: descriptionHtml,
+          }
+        : null;
 
     return {
       entityType: EntityTypeEnum.MethodReturn,
       type: returnType,
-      description: {
-        text: description,
-        html: descriptionHtml,
-      },
+      description: descriptionObject,
     };
   }
 
@@ -233,7 +243,7 @@ export class MethodScraper {
     signature: string,
   ): Collection<string, MethodTypeParameterData> {
     const data = new Collection<string, MethodTypeParameterData>();
-    if (!signature) {
+    if (!signature || !signature.startsWith('<')) {
       return data;
     }
 
@@ -277,10 +287,13 @@ export class MethodScraper {
           return;
         }
 
-        typeParameter.description = {
-          html: descriptionHtml,
-          text: description,
-        };
+        typeParameter.description =
+          descriptionHtml || description
+            ? {
+                text: description,
+                html: descriptionHtml,
+              }
+            : null;
       });
 
     return data;
@@ -293,9 +306,9 @@ export class MethodScraper {
   } {
     const name = $element.find('code').first().text();
     const $description = $element.contents().not('code').first();
-    const descriptionHtml =
-      $description.html()?.replace('- ', '')?.trim() ?? null;
     const description = $description.text()?.replace('- ', '')?.trim() ?? null;
+    const descriptionHtml =
+      $description.html()?.replace('- ', '')?.trim() ?? description ?? null;
     return { name, descriptionHtml, description };
   }
 

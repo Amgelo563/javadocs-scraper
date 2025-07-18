@@ -131,7 +131,7 @@ _² - Only a type, not available in runtime._
 
 The scraping process ocurs in the following steps:
 
-1. A `QueryStrategy` is chosen by the `QueryStrategyFactory`.
+1. A `QueryStrategy` is chosen by the `QueryStrategyBundleFactory`.
 2. The `RootScraper` iterates through every package in the Javadocs root.
 3. For every package, it's fetched, and passed to the `PackageScraper`.
 4. The `PackageScraper` iterates through every class, interface, enum and annotation in the package and passes them to the appropriate `Scraper`.
@@ -140,14 +140,33 @@ The scraping process ocurs in the following steps:
 7. The `Scraper` returns the patched objects, in a `Javadocs` object.
 
 > [!TIP]
-> You can provide your own `QueryStrategyFactory` to change the way the `QueryStrategy` is chosen.
+> You can provide your own `QueryStrategyBundleFactory` to change the way the `QueryStrategy` is chosen.
 > ```ts
 > import { OnlineFetcher } from 'javadocs-scraper';
 > 
 > const myFetcher = new OnlineFetcher('https://...');
-> const factory = new MyQueryStrategyFactory();
+> const factory = ($root: CheerioAPI) => {...};
 > const scraper = Scraper.with({
 >   fetcher: myFetcher,
->   queryStrategyFactory: factory
+>   strategyBundleFactory: factory
 > });
 > ```
+
+### Query Strategies
+
+Query strategies help fetch data across Java versions, without needing to write lengthy conditional code.
+These strategies don't actually know the Java version at runtime they're running on, and are made to support multiple at once.
+
+In particular, the library provides two strategy "types", which are free to be extended:
+
+## Legacy strategies
+
+For Javadocs 8 to 15. Some of the queries reassemble those of the modern strategy because of 13-15 Javadocs, which are a mix of legacy and modern, but from testing they mostly match legacy.
+
+Legacy Javadocs don't have a consistent structure, so this strategy has a couple of workarounds, hacks and pre-compiled regexes to extract the data correctly.
+
+## Modern strategies
+
+For Javadocs 16 to last supported (21 at the time of writing). Some of the queries reassemble those of the legacy strategy because of 16 Javadocs, which are a mix of legacy and modern, but from testing they mostly match modern.
+
+Modern Javadocs have a more consistent structure, with classes and ids easy to query directly.

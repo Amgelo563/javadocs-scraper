@@ -7,7 +7,7 @@ import type { FieldData } from '../../entities/field/FieldData';
 import type { Modifier } from '../../entities/modifier/Modifier';
 import { findModifiers } from '../../entities/modifier/Modifier';
 import { EntityTypeEnum } from '../../entities/type/EntityType';
-import type { QueryStrategy } from '../../query/QueryStrategy';
+import type { FieldQueryStrategy } from '../../query/field/FieldQueryStrategy';
 import { TextFormatter } from '../../text/TextFormatter';
 
 /** Scrapes the {@link FieldData}s from an object wrapped in a {@link CheerioAPI}. */
@@ -16,7 +16,7 @@ export class FieldScraper {
     $object: CheerioAPI,
     $tables: Cheerio<Element>,
     objectUrl: string,
-    strategy: QueryStrategy,
+    strategy: FieldQueryStrategy,
   ): Collection<string, FieldData<null>> {
     if (!$tables || $tables.length === 0) {
       return new Collection();
@@ -44,7 +44,7 @@ export class FieldScraper {
       const description = $description.text().trim() ?? null;
 
       const fieldType = strategy.queryFieldType($signature, signature);
-      const deprecation = strategy.queryMemberDeprecation($field);
+      const deprecation = strategy.queryFieldDeprecation($field);
 
       const field: FieldData<null> = {
         entityType: EntityTypeEnum.Field,

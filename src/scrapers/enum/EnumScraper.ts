@@ -5,7 +5,7 @@ import { EntityTypeEnum } from '../../entities/type/EntityType';
 import type { Fetcher } from '../../fetch/Fetcher';
 import type { PartialEnumData } from '../../partials/enum/PartialEnumData';
 import type { PartialPackageData } from '../../partials/package/PartialPackageData';
-import type { QueryStrategy } from '../../query/QueryStrategy';
+import type { QueryStrategyBundle } from '../../query/bundle/QueryStrategyBundle';
 import type { ScrapeCache } from '../cache/ScrapeCache';
 import type { FieldScraper } from '../field/FieldScraper';
 import type { BaseObjectScraper } from '../object/BaseObjectScraper';
@@ -32,14 +32,14 @@ export class EnumScraper {
     url: string,
     cache: ScrapeCache,
     packageData: PartialPackageData,
-    strategy: QueryStrategy,
+    strategyBundle: QueryStrategyBundle,
   ): Promise<PartialEnumData> {
     const { $, fullUrl } = await this.fetcher.fetch(url);
     const base = this.baseObjectScraper.scrape(
       $,
       fullUrl,
       packageData,
-      strategy,
+      strategyBundle,
       EntityTypeEnum.Enum,
     );
     delete (base as { partialExtends?: unknown[] }).partialExtends;
@@ -49,12 +49,13 @@ export class EnumScraper {
       return present;
     }
 
-    const constantTables = strategy.queryEnumConstantTables($);
+    const constantTables =
+      strategyBundle.enumStrategy.queryEnumConstantTables($);
     const constantsAsFields = this.fieldScraper.scrape(
       $,
       constantTables,
       fullUrl,
-      strategy,
+      strategyBundle.fieldStrategy,
     );
 
     const constants = new Collection<string, EnumConstantData>();

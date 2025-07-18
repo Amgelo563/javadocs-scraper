@@ -5,7 +5,8 @@ import type { EntityType } from '../../entities/type/EntityType';
 import { EntityTypeEnum } from '../../entities/type/EntityType';
 import type { Fetcher } from '../../fetch/Fetcher';
 import type { PartialPackageData } from '../../partials/package/PartialPackageData';
-import type { QueryStrategy } from '../../query/QueryStrategy';
+import type { QueryStrategyBundle } from '../../query/bundle/QueryStrategyBundle';
+import type { ObjectQueryStrategy } from '../../query/object/ObjectQueryStrategy';
 import { TextFormatter } from '../../text/TextFormatter';
 import type { FieldScraper } from '../field/FieldScraper';
 import type { InheritanceScraper } from '../inheritance/InheritanceScraper';
@@ -40,43 +41,60 @@ export class BaseObjectScraper {
     $: CheerioAPI,
     fullUrl: string,
     packageData: PartialPackageData,
-    strategy: QueryStrategy,
+    strategyBundle: QueryStrategyBundle,
     expectedType: EntityType,
   ) {
     const name = $('title').text().split(' ')[0];
     const qualifiedName = `${packageData.name}.${name}`;
 
-    const $signature = strategy.queryObjectSignature($);
+    const $signature = strategyBundle.objectStrategy.queryObjectSignature($);
     const signature = TextFormatter.stripWhitespaceInline($signature.text());
 
-    const $description = strategy.queryObjectDescription($);
-    const descriptionHtml = $description.html();
+    const $description =
+      strategyBundle.objectStrategy.queryObjectDescription($);
     const description = $description.text();
+    const descriptionHtml = $description.html() ?? description;
+    const descriptionObject =
+      description || descriptionHtml
+        ? {
+            html: descriptionHtml ?? null,
+            text: description ?? null,
+          }
+        : null;
 
-    const extensions = this.inheritanceScraper.scrapeExtensions($, strategy);
+    const extensions = this.inheritanceScraper.scrapeExtensions(
+      $,
+      strategyBundle.objectStrategy,
+    );
     const implementations = this.inheritanceScraper.scrapeImplementations(
       $,
-      strategy,
+      strategyBundle.objectStrategy,
     );
     const methods = this.methodScraper.scrape(
       $,
       fullUrl,
-      strategy,
+      strategyBundle.methodStrategy,
+      strategyBundle.annotationStrategy,
       expectedType,
     );
-    const $fieldTables = strategy.queryFieldTables($);
-    const fields = this.fieldScraper.scrape($, $fieldTables, fullUrl, strategy);
+    const $fieldTables = strategyBundle.fieldStrategy.queryFieldTables($);
+    const fields = this.fieldScraper.scrape(
+      $,
+      $fieldTables,
+      fullUrl,
+      strategyBundle.fieldStrategy,
+    );
 
-    const typeParameters = this.extractTypeParameters($, strategy);
-    const deprecation = strategy.queryObjectDeprecation($);
+    const typeParameters = this.extractTypeParameters(
+      $,
+      strategyBundle.objectStrategy,
+    );
+    const deprecation = strategyBundle.objectStrategy.queryObjectDeprecation($);
 
     return {
       name,
       qualifiedName,
-      description: {
-        text: description,
-        html: descriptionHtml,
-      },
+      description: descriptionObject,
       signature,
       url: fullUrl,
       partialPackage: packageData,
@@ -91,7 +109,7 @@ export class BaseObjectScraper {
 
   protected extractTypeParameters(
     $: CheerioAPI,
-    strategy: QueryStrategy,
+    objectStrategy: ObjectQueryStrategy,
   ): Collection<string, ObjectTypeParameterData> {
     const data: Collection<string, ObjectTypeParameterData> = new Collection();
     const [_type, ...parts] = $('.title').first().text().split(' ');
@@ -117,7 +135,8 @@ export class BaseObjectScraper {
         extends: extension ? extension : null,
       });
     }
-    strategy
+
+    objectStrategy
       .queryTypeParametersHeader($)
       .nextUntil('dt, dl')
       .each((_i, element) => {
@@ -138,10 +157,13 @@ export class BaseObjectScraper {
           return;
         }
 
-        typeParameter.description = {
-          text: description,
-          html: descriptionHtml,
-        };
+        typeParameter.description =
+          description || descriptionHtml
+            ? {
+                html: descriptionHtml,
+                text: description,
+              }
+            : null;
       });
 
     return data;

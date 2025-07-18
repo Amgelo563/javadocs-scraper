@@ -10,7 +10,7 @@ import { EntityTypeEnum } from '../../entities/type/EntityType';
 import type { Fetcher } from '../../fetch/Fetcher';
 import type { PartialAnnotationData } from '../../partials/annotation/PartialAnnotationData';
 import type { PartialPackageData } from '../../partials/package/PartialPackageData';
-import type { QueryStrategy } from '../../query/QueryStrategy';
+import type { QueryStrategyBundle } from '../../query/bundle/QueryStrategyBundle';
 import type { ScrapeCache } from '../cache/ScrapeCache';
 import type { BaseObjectScraper } from '../object/BaseObjectScraper';
 
@@ -30,14 +30,14 @@ export class AnnotationScraper {
     url: string,
     cache: ScrapeCache,
     packageData: PartialPackageData,
-    strategy: QueryStrategy,
+    strategyBundle: QueryStrategyBundle,
   ): Promise<PartialAnnotationData> {
     const { $, fullUrl } = await this.fetcher.fetch(url);
     const base = this.baseObjectScraper.scrape(
       $,
       fullUrl,
       packageData,
-      strategy,
+      strategyBundle,
       EntityTypeEnum.Annotation,
     );
     delete (base as { partialExtends?: unknown[] }).partialExtends;
