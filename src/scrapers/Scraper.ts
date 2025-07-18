@@ -99,7 +99,10 @@ export class Scraper {
       fieldScraper,
     );
     const interfaceScraper = new InterfaceScraper(fetcher, baseObjectScraper);
-    const annotationScraper = new AnnotationScraper(fetcher, baseObjectScraper);
+    const annotationScraper = AnnotationScraper.create(
+      fetcher,
+      baseObjectScraper,
+    );
     const classScraper = new ClassScraper(fetcher, baseObjectScraper);
     const packageScraper = new PackageScraper({
       fetcher,

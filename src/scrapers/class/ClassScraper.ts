@@ -25,13 +25,12 @@ export class ClassScraper {
     strategyBundle: QueryStrategyBundle,
   ): Promise<PartialClassData> {
     const { $, fullUrl } = await this.fetcher.fetch(url);
-    const base = this.baseObjectScraper.scrape(
+    const base = this.baseObjectScraper.scrape({
       $,
       fullUrl,
       packageData,
       strategyBundle,
-      EntityTypeEnum.Class,
-    );
+    });
 
     const present = cache.partialClasses.get(base.qualifiedName);
     if (present) {

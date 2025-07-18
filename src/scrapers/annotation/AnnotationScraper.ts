@@ -1,5 +1,3 @@
-import { Collection } from '@discordjs/collection';
-import type { AnnotationElementData } from '../../entities/annotation/element/AnnotationElementData';
 import {
   type ElementType,
   toElementTypes,
@@ -13,17 +11,37 @@ import type { PartialPackageData } from '../../partials/package/PartialPackageDa
 import type { QueryStrategyBundle } from '../../query/bundle/QueryStrategyBundle';
 import type { ScrapeCache } from '../cache/ScrapeCache';
 import type { BaseObjectScraper } from '../object/BaseObjectScraper';
+import { AnnotationElementScraper } from './AnnotationElementScraper';
 
 export class AnnotationScraper {
   public static readonly AnnotationContentRegex = /\((?<content>[^()]+)\)/;
 
   protected readonly baseObjectScraper: BaseObjectScraper;
 
+  protected readonly annotationElementScraper: AnnotationElementScraper;
+
   protected readonly fetcher: Fetcher;
 
-  constructor(fetcher: Fetcher, baseObjectScraper: BaseObjectScraper) {
+  constructor(
+    fetcher: Fetcher,
+    baseObjectScraper: BaseObjectScraper,
+    annotationElementScraper: AnnotationElementScraper,
+  ) {
     this.fetcher = fetcher;
     this.baseObjectScraper = baseObjectScraper;
+    this.annotationElementScraper = annotationElementScraper;
+  }
+
+  public static create(
+    fetcher: Fetcher,
+    baseObjectScraper: BaseObjectScraper,
+  ): AnnotationScraper {
+    const annotationElementScraper = new AnnotationElementScraper();
+    return new AnnotationScraper(
+      fetcher,
+      baseObjectScraper,
+      annotationElementScraper,
+    );
   }
 
   public async scrape(
@@ -33,13 +51,14 @@ export class AnnotationScraper {
     strategyBundle: QueryStrategyBundle,
   ): Promise<PartialAnnotationData> {
     const { $, fullUrl } = await this.fetcher.fetch(url);
-    const base = this.baseObjectScraper.scrape(
+    const base = this.baseObjectScraper.scrape({
       $,
       fullUrl,
       packageData,
       strategyBundle,
-      EntityTypeEnum.Annotation,
-    );
+      omitMethods: false,
+    });
+
     delete (base as { partialExtends?: unknown[] }).partialExtends;
     delete (base as { partialImplements?: unknown[] }).partialImplements;
 
@@ -48,24 +67,11 @@ export class AnnotationScraper {
       return present;
     }
 
-    const elements: Collection<string, AnnotationElementData> =
-      new Collection();
-    for (const method of base.methods.values()) {
-      const data: AnnotationElementData = {
-        entityType: EntityTypeEnum.AnnotationElement,
-        id: method.name,
-        name: method.name,
-        description: method.description,
-        signature: method.signature,
-        url: method.url,
-        returns: method.returns,
-        modifiers: method.modifiers,
-        deprecation: method.deprecation,
-        annotations: method.annotations,
-      };
-
-      elements.set(data.id, data);
-    }
+    const elements = this.annotationElementScraper.scrape({
+      $object: $,
+      objectUrl: fullUrl,
+      annotationStrategy: strategyBundle.annotationStrategy,
+    });
 
     const data: PartialAnnotationData = {
       entityType: EntityTypeEnum.Annotation,

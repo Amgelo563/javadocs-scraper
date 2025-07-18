@@ -37,27 +37,13 @@ export class LegacyMethodQueryStrategy implements MethodQueryStrategy {
       );
     }
 
-    let isElementDetail = false;
     // java 8-12
     const h3Element = $object('h3').filter((_, el) => {
       const text = $object(el).text().trim();
-      if (text === 'Method Detail') {
-        return true;
-      }
-      if (text === 'Element Detail') {
-        isElementDetail = true;
-        return true;
-      }
-      return false;
+      return text === 'Method Detail';
     });
 
-    let nextSiblings = isElementDetail
-      ? h3Element.parent().parent().nextAll('a, ul')
-      : h3Element.nextAll('a, ul');
-    if (isElementDetail) {
-      nextSiblings = nextSiblings.add(h3Element.parent().parent());
-    }
-
+    const nextSiblings = h3Element.nextAll('a, ul');
     let currentRowHtml = "<div class='method-detail'>";
     let rowsHtml = '';
 
@@ -150,10 +136,16 @@ export class LegacyMethodQueryStrategy implements MethodQueryStrategy {
     $method: Cheerio<Element>,
   ): DeprecationContent | null {
     const $deprecation = $method.find(
-      'div.block > i, div.block > span.deprecationComment, div.deprecationBlock > div.deprecationComment, div.deprecation-block > div.deprecation-comment',
+      'div.block > i, .block > span.deprecationComment, div.deprecationBlock > div.deprecationComment, div.deprecation-block > div.deprecation-comment',
     );
     if (!$deprecation || !$deprecation.length) {
-      return null;
+      const hasLabel = $method.find('.deprecatedLabel').length > 0;
+      if (!hasLabel) return null;
+      return {
+        text: null,
+        html: null,
+        forRemoval: false,
+      };
     }
 
     const text = $deprecation.text().trim() ?? null;

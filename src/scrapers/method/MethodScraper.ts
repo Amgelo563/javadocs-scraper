@@ -10,11 +10,7 @@ import type { MethodTypeParameterData } from '../../entities/method/type/MethodT
 import type { Modifier } from '../../entities/modifier/Modifier';
 import { findModifiers } from '../../entities/modifier/Modifier';
 import type { ParameterData } from '../../entities/parameter/ParameterData';
-import {
-  type EntityType,
-  EntityTypeEnum,
-} from '../../entities/type/EntityType';
-import type { AnnotationQueryStrategy } from '../../query/annotation/AnnotationQueryStrategy';
+import { EntityTypeEnum } from '../../entities/type/EntityType';
 import type { MethodQueryStrategy } from '../../query/method/MethodQueryStrategy';
 import { TextFormatter } from '../../text/TextFormatter';
 
@@ -27,8 +23,6 @@ export class MethodScraper {
     $object: CheerioAPI,
     objectUrl: string,
     methodStrategy: MethodQueryStrategy,
-    annotationStrategy: AnnotationQueryStrategy,
-    expectedType: EntityType,
   ): Collection<string, MethodData<null>> {
     const $methodTables = methodStrategy.queryMethodTables($object);
     if (!$methodTables || $methodTables.length === 0) {
@@ -71,13 +65,7 @@ export class MethodScraper {
         methodStrategy,
       );
       const deprecation = methodStrategy.queryMethodDeprecation($method);
-      const returns = this.extractReturns(
-        $method,
-        $signature,
-        methodStrategy,
-        annotationStrategy,
-        expectedType,
-      );
+      const returns = this.extractReturns($method, $signature, methodStrategy);
 
       const annotations = this.extractAnnotations(signature);
       const typeParameters = this.extractTypeParameters($method, signature);
@@ -210,13 +198,8 @@ export class MethodScraper {
     $method: Cheerio<Element>,
     $signature: Cheerio<Element>,
     methodStrategy: MethodQueryStrategy,
-    annotationStrategy: AnnotationQueryStrategy,
-    expectedType: EntityType,
   ): MethodReturnData {
-    const returnType =
-      expectedType === EntityTypeEnum.Annotation
-        ? annotationStrategy.queryAnnotationElementReturnType($signature)
-        : methodStrategy.queryMethodReturnType($signature);
+    const returnType = methodStrategy.queryMethodReturnType($signature);
 
     const $description = $method
       .find('dt:contains("Returns:")')

@@ -10,7 +10,7 @@ export type CommonEntityData<Type extends EntityType> = {
    *
    * Specifically:
    * - In classes, enums, interfaces, external objects and annotations: the `qualifiedName`.
-   * - In packages, enum constants, fields, method type parameters, object type parameters and parameters: the `name`.
+   * - In packages, enum constants, fields, annotation elements, method type parameters, object type parameters and parameters: the `name`.
    * - In methods: the `prototype`, to avoid conflicts with overloaded methods.
    */
   id: string;

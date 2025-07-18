@@ -35,13 +35,12 @@ export class EnumScraper {
     strategyBundle: QueryStrategyBundle,
   ): Promise<PartialEnumData> {
     const { $, fullUrl } = await this.fetcher.fetch(url);
-    const base = this.baseObjectScraper.scrape(
+    const base = this.baseObjectScraper.scrape({
       $,
       fullUrl,
       packageData,
       strategyBundle,
-      EntityTypeEnum.Enum,
-    );
+    });
     delete (base as { partialExtends?: unknown[] }).partialExtends;
 
     const present = cache.partialEnums.get(base.qualifiedName);

@@ -24,13 +24,12 @@ export class InterfaceScraper {
     strategyBundle: QueryStrategyBundle,
   ): Promise<PartialInterfaceData> {
     const { $, fullUrl } = await this.fetcher.fetch(url);
-    const base = this.baseObjectScraper.scrape(
+    const base = this.baseObjectScraper.scrape({
       $,
       fullUrl,
       packageData,
       strategyBundle,
-      EntityTypeEnum.Interface,
-    );
+    });
     delete (base as { partialImplements?: unknown[] }).partialImplements;
 
     const present = cache.partialInterfaces.get(base.qualifiedName);

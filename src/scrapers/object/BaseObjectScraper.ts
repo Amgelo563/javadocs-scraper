@@ -1,7 +1,6 @@
 import { Collection } from '@discordjs/collection';
 import type { CheerioAPI } from 'cheerio';
 import type { ObjectTypeParameterData } from '../../entities/object/ObjectTypeParameterData';
-import type { EntityType } from '../../entities/type/EntityType';
 import { EntityTypeEnum } from '../../entities/type/EntityType';
 import type { Fetcher } from '../../fetch/Fetcher';
 import type { PartialPackageData } from '../../partials/package/PartialPackageData';
@@ -37,13 +36,14 @@ export class BaseObjectScraper {
     this.inheritanceScraper = options.inheritanceScraper;
   }
 
-  public scrape(
-    $: CheerioAPI,
-    fullUrl: string,
-    packageData: PartialPackageData,
-    strategyBundle: QueryStrategyBundle,
-    expectedType: EntityType,
-  ) {
+  public scrape(options: {
+    $: CheerioAPI;
+    fullUrl: string;
+    packageData: PartialPackageData;
+    strategyBundle: QueryStrategyBundle;
+    omitMethods?: boolean;
+  }) {
+    const { $, fullUrl, packageData, strategyBundle } = options;
     const name = $('title').text().split(' ')[0];
     const qualifiedName = `${packageData.name}.${name}`;
 
@@ -70,13 +70,9 @@ export class BaseObjectScraper {
       $,
       strategyBundle.objectStrategy,
     );
-    const methods = this.methodScraper.scrape(
-      $,
-      fullUrl,
-      strategyBundle.methodStrategy,
-      strategyBundle.annotationStrategy,
-      expectedType,
-    );
+    const methods = options.omitMethods
+      ? new Collection<string, never>()
+      : this.methodScraper.scrape($, fullUrl, strategyBundle.methodStrategy);
     const $fieldTables = strategyBundle.fieldStrategy.queryFieldTables($);
     const fields = this.fieldScraper.scrape(
       $,
