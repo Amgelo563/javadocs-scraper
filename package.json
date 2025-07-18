@@ -12,7 +12,9 @@
     "build": "pnpm run clean && tsup ./src",
     "barrel": "pnpm dlx barrelsby -- -d ./src -D -q -H",
     "lint": "eslint src",
+    "lint:file": "eslint --fix",
     "format": "prettier --write src",
+    "format:file": "prettier --write",
     "prepare": "husky || true",
     "typedoc": "typedoc src/index.ts"
   },
@@ -57,8 +59,8 @@
   "packageManager": "pnpm@9.5.0",
   "lint-staged": {
     "*.ts": [
-      "pnpm format",
-      "pnpm lint --fix"
+      "pnpm format:file",
+      "pnpm lint:file"
     ]
   }
 }
