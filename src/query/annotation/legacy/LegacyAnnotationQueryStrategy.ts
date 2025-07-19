@@ -8,15 +8,27 @@ export class LegacyAnnotationQueryStrategy implements AnnotationQueryStrategy {
   public queryElementTables($object: CheerioAPI): Cheerio<Element> {
     const blocks: Cheerio<AnyNode>[] = [];
 
-    $object('a[name$="--"], a[id$="()"]').each((_, anchor) => {
-      const $anchor = $object(anchor);
-      const $ul = $anchor.next('ul');
+    $object('a[name$="--"], a[id$="()"], section[id$="()"]').each(
+      (_, anchor) => {
+        const $anchor = $object(anchor);
+        let $ul = $anchor.next('ul');
+        if (!$ul || !$ul.length) {
+          const parent = anchor.parent?.parent;
+          if (!parent || parent.type !== 'tag') {
+            throw new Error(
+              `Expected <ul> after <a> but found ${parent ?? 'null'}`,
+            );
+          }
 
-      const wrapper = $object('<div></div>');
-      wrapper.append($anchor.clone(), $ul.clone());
+          $ul = $object(parent);
+        }
 
-      blocks.push(wrapper);
-    });
+        const wrapper = $object('<div></div>');
+        wrapper.append($anchor.clone(), $ul.clone());
+
+        blocks.push(wrapper);
+      },
+    );
 
     const merged: AnyNode[] = [];
     for (const cheerioArray of blocks) {
@@ -53,6 +65,7 @@ export class LegacyAnnotationQueryStrategy implements AnnotationQueryStrategy {
       .find(
         'ul > li.blockList > h4, div.memberSignature > span.memberName, div.member-signature > span.member-name',
       )
+      .first()
       .text();
   }
 
@@ -70,7 +83,8 @@ export class LegacyAnnotationQueryStrategy implements AnnotationQueryStrategy {
       'div.block > i, .block > span.deprecationComment, div.deprecationBlock > div.deprecationComment, div.deprecation-block > div.deprecation-comment',
     );
     if (!$deprecation || !$deprecation.length) {
-      const hasLabel = $element.find('.deprecatedLabel').length > 0;
+      const hasLabel =
+        $element.find('.deprecatedLabel, .deprecated-label').length > 0;
       if (!hasLabel) return null;
       return {
         text: null,
