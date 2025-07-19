@@ -73,7 +73,7 @@ export class LegacyAnnotationQueryStrategy implements AnnotationQueryStrategy {
     // java 8-12
     const legacy = $element.find('ul > li.blockList > div.block').last();
     // second is java 13+
-    return legacy.length ? legacy : $element.find('div.block');
+    return legacy.length ? legacy : $element.find('div.block').first();
   }
 
   public queryElementDeprecation(
