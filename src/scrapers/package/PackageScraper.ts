@@ -51,8 +51,8 @@ export class PackageScraper {
 
     const $description =
       strategyBundle.packageStrategy.queryPackageDescription($);
-    const descriptionHtml = $description.html()?.trim() ?? null;
-    const description = $description.text()?.trim() ?? null;
+    const descriptionHtml = $description.html()?.trim() || null;
+    const description = $description.text()?.trim() || null;
     const descriptionObject =
       description || descriptionHtml
         ? {

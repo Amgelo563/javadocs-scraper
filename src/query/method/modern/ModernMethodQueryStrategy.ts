@@ -53,8 +53,8 @@ export class ModernMethodQueryStrategy implements MethodQueryStrategy {
     const forRemoval = label.text().includes('for removal');
 
     const $comment = $deprecated.find('.deprecation-comment');
-    const text = $comment.length ? $comment.text().trim() : null;
-    const html = $comment.html()?.trim() ?? text ?? null;
+    const text = $comment.text().trim() || null;
+    const html = $comment.html()?.trim() ?? text;
 
     return {
       forRemoval,

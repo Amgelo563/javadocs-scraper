@@ -100,7 +100,7 @@ export class LegacyFieldQueryStrategy implements FieldQueryStrategy {
       return null;
     }
 
-    const text = $deprecation.text().trim() ?? null;
+    const text = $deprecation.text().trim() || null;
     const pre = $field.find('pre');
     const forRemoval = pre.text().includes('forRemoval=true');
 

@@ -93,7 +93,7 @@ export class LegacyAnnotationQueryStrategy implements AnnotationQueryStrategy {
       };
     }
 
-    const text = $deprecation.text().trim() ?? null;
+    const text = $deprecation.text().trim() || null;
     const pre = $element.find('pre');
     const forRemoval = pre.text().includes('forRemoval=true');
 

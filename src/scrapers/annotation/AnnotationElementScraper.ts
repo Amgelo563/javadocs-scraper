@@ -45,8 +45,8 @@ export class AnnotationElementScraper {
         $signature,
       );
       const $description = annotationStrategy.queryElementDescription($element);
-      const description = $description.text().trim() ?? null;
-      const descriptionHtml = $description.html()?.trim() ?? description;
+      const description = $description.text().trim() || null;
+      const descriptionHtml = $description.html()?.trim() || description;
 
       const deprecation = annotationStrategy.queryElementDeprecation($element);
       const returns = this.extractReturns(
@@ -89,8 +89,8 @@ export class AnnotationElementScraper {
     const $description = $element
       .find('dt:contains("Returns:")')
       .nextUntil('dt');
-    const description = $description.text()?.trim() ?? null;
-    const descriptionHtml = $description.html()?.trim() ?? description ?? null;
+    const description = $description.text()?.trim() || null;
+    const descriptionHtml = $description.html()?.trim() || description;
     const descriptionObject =
       description || descriptionHtml
         ? {

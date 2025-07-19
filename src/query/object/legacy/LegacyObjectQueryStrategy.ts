@@ -43,7 +43,7 @@ export class LegacyObjectQueryStrategy implements ObjectQueryStrategy {
     }
 
     const parts = extendsHtml.split('implements');
-    return parts[1] ?? null;
+    return parts[1] || null;
   }
 
   public queryTypeParametersHeader($object: CheerioAPI): Cheerio<Element> {
@@ -68,7 +68,7 @@ export class LegacyObjectQueryStrategy implements ObjectQueryStrategy {
       return null;
     }
 
-    const text = $comment.text().trim() ?? null;
+    const text = $comment.text().trim() || null;
     const forRemoval = $object('.deprecated-label')
       .text()
       .includes('for removal');

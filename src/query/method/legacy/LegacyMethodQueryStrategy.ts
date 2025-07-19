@@ -119,7 +119,7 @@ export class LegacyMethodQueryStrategy implements MethodQueryStrategy {
         ),
       )
       .join(', ');
-    return $signature.clone().text(parameters) ?? null;
+    return $signature.clone().text(parameters) || null;
   }
 
   public queryMethodReturnType($signature: Cheerio<Element>): string {
@@ -148,7 +148,7 @@ export class LegacyMethodQueryStrategy implements MethodQueryStrategy {
       };
     }
 
-    const text = $deprecation.text().trim() ?? null;
+    const text = $deprecation.text().trim() || null;
     const pre = $method.find('pre');
     const forRemoval = pre.text().includes('forRemoval=true');
 

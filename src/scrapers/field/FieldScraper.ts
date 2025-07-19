@@ -40,8 +40,15 @@ export class FieldScraper {
       const accessModifier = findAccessModifier(signature);
 
       const $description = strategy.queryFieldDescription($field);
-      const descriptionHtml = $description.html()?.trim() ?? null;
-      const description = $description.text().trim() ?? null;
+      const description = $description.text().trim() || null;
+      const descriptionHtml = $description.html()?.trim() || description;
+      const descriptionObject =
+        description || descriptionHtml
+          ? {
+              text: description,
+              html: descriptionHtml,
+            }
+          : null;
 
       const fieldType = strategy.queryFieldType($signature, signature);
       const deprecation = strategy.queryFieldDeprecation($field);
@@ -49,10 +56,7 @@ export class FieldScraper {
       const field: FieldData<null> = {
         entityType: EntityTypeEnum.Field,
         name: fieldId,
-        description: {
-          text: description,
-          html: descriptionHtml,
-        },
+        description: descriptionObject,
         signature,
         modifiers,
         type: fieldType,

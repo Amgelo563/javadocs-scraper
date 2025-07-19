@@ -22,11 +22,11 @@ export class ModernObjectQueryStrategy implements ObjectQueryStrategy {
     const forRemoval = label.text().includes('for removal');
 
     const $comment = $deprecated.find('.deprecation-comment');
-    const text = $comment.text().trim() ?? null;
+    const text = $comment.text().trim() || null;
 
     return {
       forRemoval,
-      html: $comment.html() ?? text ?? null,
+      html: $comment.html() ?? text,
       text,
     };
   }
@@ -58,7 +58,7 @@ export class ModernObjectQueryStrategy implements ObjectQueryStrategy {
     }
 
     const parts = extendsHtml.split('implements');
-    return parts[1] ?? null;
+    return parts[1] || null;
   }
 
   public queryTypeParametersHeader($object: CheerioAPI): Cheerio<Element> {

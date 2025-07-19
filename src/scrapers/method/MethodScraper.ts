@@ -54,8 +54,8 @@ export class MethodScraper {
 
       const name = methodStrategy.queryMethodNameText($method, $signature);
       const $description = methodStrategy.queryMethodDescription($method);
-      const description = $description.text().trim() ?? null;
-      const descriptionHtml = $description.html()?.trim() ?? description;
+      const description = $description.text().trim() || null;
+      const descriptionHtml = $description.html()?.trim() || description;
 
       const parameters = this.extractParameters(
         $object,
@@ -204,8 +204,8 @@ export class MethodScraper {
     const $description = $method
       .find('dt:contains("Returns:")')
       .nextUntil('dt');
-    const description = $description.text()?.trim() ?? null;
-    const descriptionHtml = $description.html()?.trim() ?? description ?? null;
+    const description = $description.text()?.trim() || null;
+    const descriptionHtml = $description.html()?.trim() || description;
     const descriptionObject =
       description || descriptionHtml
         ? {
@@ -289,9 +289,9 @@ export class MethodScraper {
   } {
     const name = $element.find('code').first().text();
     const $description = $element.contents().not('code').first();
-    const description = $description.text()?.replace('- ', '')?.trim() ?? null;
+    const description = $description.text()?.replace('- ', '')?.trim() || null;
     const descriptionHtml =
-      $description.html()?.replace('- ', '')?.trim() ?? description ?? null;
+      $description.html()?.replace('- ', '')?.trim() || description;
     return { name, descriptionHtml, description };
   }
 

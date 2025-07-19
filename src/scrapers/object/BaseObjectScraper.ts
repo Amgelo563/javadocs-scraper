@@ -52,13 +52,13 @@ export class BaseObjectScraper {
 
     const $description =
       strategyBundle.objectStrategy.queryObjectDescription($);
-    const description = $description.text();
-    const descriptionHtml = $description.html() ?? description;
+    const description = $description.text() || null;
+    const descriptionHtml = $description.html() || description;
     const descriptionObject =
       description || descriptionHtml
         ? {
-            html: descriptionHtml ?? null,
-            text: description ?? null,
+            html: descriptionHtml || null,
+            text: description || null,
           }
         : null;
 
@@ -139,11 +139,10 @@ export class BaseObjectScraper {
         const $element = $(element);
         const name = $element.find('code').first().text();
         const $description = $element.contents().not('code').first();
-        const description =
-          $description.text()?.replace('- ', '')?.trim() ?? null;
+        const description = $description.text()?.replace('- ', '')?.trim();
         $description.text(description);
 
-        const descriptionHtml = $description.html() ?? description;
+        const descriptionHtml = $description.html() || description;
 
         const typeParameter = data.get(name);
         if (!typeParameter) {
