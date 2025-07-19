@@ -1,7 +1,7 @@
 import type { Cheerio, CheerioAPI } from 'cheerio';
 import { load } from 'cheerio';
 import type { Element } from 'domhandler';
-import { isAccessModifier } from '../../../entities/access/AccessModifier';
+import { startsWithAccessModifier } from '../../../entities/access/AccessModifier';
 import type { DeprecationContent } from '../../../entities/deprecation/DeprecationContent';
 import { TextFormatter } from '../../../text/TextFormatter';
 import type { MethodQueryStrategy } from '../MethodQueryStrategy';
@@ -124,7 +124,7 @@ export class LegacyMethodQueryStrategy implements MethodQueryStrategy {
 
   public queryMethodReturnType($signature: Cheerio<Element>): string {
     const parts = $signature.text().split(TextFormatter.NoBreakSpaceRegex);
-    if (isAccessModifier(parts[0])) {
+    if (startsWithAccessModifier(parts[0])) {
       parts.shift();
     }
     const part = parts[0].startsWith('<') ? parts[1] : parts[0];
