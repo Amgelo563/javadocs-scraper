@@ -136,10 +136,11 @@ export class LegacyMethodQueryStrategy implements MethodQueryStrategy {
     $method: Cheerio<Element>,
   ): DeprecationContent | null {
     const $deprecation = $method.find(
-      'div.block > i, .block > span.deprecationComment, div.deprecationBlock > div.deprecationComment, div.deprecation-block > div.deprecation-comment',
+      '.block > span.deprecationComment, div.deprecationBlock > div.deprecationComment, div.deprecation-block > div.deprecation-comment',
     );
     if (!$deprecation || !$deprecation.length) {
-      const hasLabel = $method.find('.deprecatedLabel').length > 0;
+      const hasLabel =
+        $method.find('.deprecatedLabel, .deprecated-label').length > 0;
       if (!hasLabel) return null;
       return {
         text: null,
