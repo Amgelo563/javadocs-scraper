@@ -93,20 +93,24 @@ export class LegacyFieldQueryStrategy implements FieldQueryStrategy {
   public queryFieldDeprecation(
     $field: Cheerio<Element>,
   ): DeprecationContent | null {
-    const $deprecation = $field.find(
-      'div.block > i, div.block > span.deprecationComment, div.deprecationBlock > div.deprecationComment, div.deprecation-block > div.deprecation-comment',
+    const $block = $field.find(
+      'div.block > .deprecatedLabel, div.deprecationBlock, div.deprecation-block',
     );
-    if (!$deprecation || !$deprecation.length) {
+    if (!$block || !$block.length) {
       return null;
     }
 
-    const text = $deprecation.text().trim() || null;
+    const $comment = $field.find(
+      'div.block > i, div.block > span.deprecationComment, div.deprecationBlock > div.deprecationComment, div.deprecation-block > div.deprecation-comment',
+    );
+
+    const text = $comment.text().trim() || null;
     const pre = $field.find('pre');
     const forRemoval = pre.text().includes('forRemoval=true');
 
     return {
       text,
-      html: $deprecation.html() ?? text,
+      html: $comment.html() ?? text,
       forRemoval,
     };
   }
