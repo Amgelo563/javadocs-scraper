@@ -11,7 +11,9 @@ export class ModernObjectQueryStrategy implements ObjectQueryStrategy {
   public queryObjectDeprecation(
     $object: CheerioAPI,
   ): DeprecationContent | null {
-    const $deprecated = $object('#class-description > .deprecation-block');
+    const $deprecated = $object(
+      '#class-description > .deprecation-block, section.description > .deprecation-block',
+    );
     if (!$deprecated || !$deprecated.length) {
       return null;
     }

@@ -61,20 +61,22 @@ export class LegacyObjectQueryStrategy implements ObjectQueryStrategy {
   public queryObjectDeprecation(
     $object: CheerioAPI,
   ): DeprecationContent | null {
-    const $div = $object(
-      'div.description div.block > strong:contains("Deprecated")',
-    ).parent();
-    if (!$div || !$div.length) {
+    const $comment = $object(
+      '.description .deprecationComment, .description .deprecation-comment',
+    );
+    if (!$comment || !$comment.length) {
       return null;
     }
 
-    const $deprecation = $div.find('div.block > i');
-    const text = $deprecation.text().trim() ?? null;
+    const text = $comment.text().trim() ?? null;
+    const forRemoval = $object('.deprecated-label')
+      .text()
+      .includes('for removal');
 
     return {
       text,
-      html: $deprecation.html() ?? text,
-      forRemoval: false,
+      html: $comment.html() ?? text,
+      forRemoval,
     };
   }
 }
