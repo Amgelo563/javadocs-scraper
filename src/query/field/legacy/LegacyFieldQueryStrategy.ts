@@ -110,7 +110,7 @@ export class LegacyFieldQueryStrategy implements FieldQueryStrategy {
 
     return {
       text,
-      html: $comment.html() ?? text,
+      html: $comment.html() || text,
       forRemoval,
     };
   }
