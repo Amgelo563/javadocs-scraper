@@ -5,7 +5,7 @@ import type { EnumQueryStrategy } from '../EnumQueryStrategy';
 export class ModernEnumQueryStrategy implements EnumQueryStrategy {
   public queryEnumConstantTables($object: CheerioAPI): Cheerio<Element> {
     return $object(
-      '#enum-constant-detail > .member-list > li, .enum-constant-details > .member-list > li',
+      '#enum-constant-detail > .member-list > li, .enum-constant-details > .member-list > li, section#enum\\.constant\\.detail > ul.member-list > li',
     );
   }
 }

@@ -18,6 +18,16 @@ export class LegacyEnumQueryStrategy implements EnumQueryStrategy {
    * that wraps each pair, and then selecting those divs.
    */
   public queryEnumConstantTables($object: CheerioAPI): Cheerio<Element> {
+    // java 13-15
+    const semiModernTitleElement = $object(
+      'section.constantDetails, section.constant-details',
+    );
+    if (semiModernTitleElement.length) {
+      return $object(
+        'section.constantDetails > ul.blockList > li.blockList > section.detail, .constant-details > .member-list > li',
+      );
+    }
+
     const h3Element = $object('h3').filter((_, el) => {
       const text = $object(el).text().trim();
       return text === 'Enum Constant Detail';
@@ -36,11 +46,11 @@ export class LegacyEnumQueryStrategy implements EnumQueryStrategy {
       if ($el.is('ul')) {
         currentRowHtml += '</div>';
         rowsHtml += currentRowHtml;
-        currentRowHtml = "<div class='enum-constant'>";
+        currentRowHtml = "<div class='enum-constant-detail'>";
       }
     });
 
     const $allElements = load(rowsHtml, undefined, false);
-    return $allElements('div.enum-constant');
+    return $allElements('div.enum-constant-detail');
   }
 }
