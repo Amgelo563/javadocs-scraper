@@ -1,6 +1,7 @@
 import type { Cheerio, CheerioAPI } from 'cheerio';
 import type { Element } from 'domhandler';
 import type { DeprecationContent } from '../../../entities/deprecation/DeprecationContent';
+import { TextFormatter } from '../../../text/TextFormatter';
 import type { MethodQueryStrategy } from '../MethodQueryStrategy';
 
 export class ModernMethodQueryStrategy implements MethodQueryStrategy {
@@ -40,7 +41,9 @@ export class ModernMethodQueryStrategy implements MethodQueryStrategy {
   }
 
   public queryMethodReturnType($signature: Cheerio<Element>): string {
-    return $signature.find('.return-type').text().trim();
+    return TextFormatter.stripWhitespaceInline(
+      $signature.find('.return-type').text(),
+    );
   }
 
   public queryMethodDeprecation(

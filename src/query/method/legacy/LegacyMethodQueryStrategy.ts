@@ -1,8 +1,9 @@
 import type { Cheerio, CheerioAPI } from 'cheerio';
 import { load } from 'cheerio';
 import type { Element } from 'domhandler';
-import { startsWithAccessModifier } from '../../../entities/access/AccessModifier';
+import { isAccessModifier } from '../../../entities/access/AccessModifier';
 import type { DeprecationContent } from '../../../entities/deprecation/DeprecationContent';
+import { isModifier } from '../../../entities/modifier/Modifier';
 import { TextFormatter } from '../../../text/TextFormatter';
 import type { MethodQueryStrategy } from '../MethodQueryStrategy';
 
@@ -92,10 +93,15 @@ export class LegacyMethodQueryStrategy implements MethodQueryStrategy {
   }
 
   public queryMethodDescription($method: Cheerio<Element>): Cheerio<Element> {
-    // java 8-12
-    const legacy = $method.find('ul > li.blockList > div.block').last();
-    // second is java 13+
-    return legacy.length ? legacy : $method.find('div.block');
+    const blocks = $method.find('div.block');
+
+    const filtered = blocks.filter((_, el) => {
+      const $el = $method.find(el);
+      const directSpans = $el.children('span.deprecatedLabel');
+      return directSpans.length === 0;
+    });
+
+    return filtered.last();
   }
 
   public queryMethodParameters(
@@ -123,40 +129,87 @@ export class LegacyMethodQueryStrategy implements MethodQueryStrategy {
   }
 
   public queryMethodReturnType($signature: Cheerio<Element>): string {
-    const parts = $signature.text().split(TextFormatter.NoBreakSpaceRegex);
-    if (startsWithAccessModifier(parts[0])) {
-      parts.shift();
-    }
-    const part = parts[0].startsWith('<') ? parts[1] : parts[0];
+    const text = TextFormatter.stripWhitespaceInline($signature.text());
+    const parts = this.splitBySpacesOrAngleGroups(text);
 
-    return part.split('\n').at(-1) ?? '';
+    while (true) {
+      if (parts[0].startsWith('<')) {
+        parts.shift();
+        break;
+      }
+      if (
+        isAccessModifier(parts[0])
+        || isModifier(parts[0])
+        || parts[0].startsWith('@')
+      ) {
+        parts.shift();
+      } else {
+        break;
+      }
+    }
+
+    return parts[0];
   }
 
   public queryMethodDeprecation(
     $method: Cheerio<Element>,
   ): DeprecationContent | null {
-    const $deprecation = $method.find(
+    const $label = $method.find('.deprecatedLabel, .deprecated-label');
+    if (!$label.length) return null;
+
+    const forRemoval = $label.text().includes('for removal');
+    const $comment = $method.find(
       '.block > span.deprecationComment, div.deprecationBlock > div.deprecationComment, div.deprecation-block > div.deprecation-comment',
     );
-    if (!$deprecation || !$deprecation.length) {
-      const hasLabel =
-        $method.find('.deprecatedLabel, .deprecated-label').length > 0;
-      if (!hasLabel) return null;
+    if (!$comment || !$comment.length) {
       return {
         text: null,
         html: null,
-        forRemoval: false,
+        forRemoval,
       };
     }
 
-    const text = $deprecation.text().trim() || null;
-    const pre = $method.find('pre');
-    const forRemoval = pre.text().includes('forRemoval=true');
+    const text = $comment.text().trim() || null;
 
     return {
       text,
-      html: $deprecation.html() ?? text,
+      html: $comment.html() ?? text,
       forRemoval,
     };
+  }
+
+  /**
+   * Splits a string by spaces, except when the section is wrapped in `<>`.
+   * Supports nested angle brackets (eg `<a<b>>` is treated as a single token)
+   */
+  protected splitBySpacesOrAngleGroups(input: string): string[] {
+    const tokens = [];
+    let buffer = '';
+    let depth = 0;
+
+    for (let i = 0; i < input.length; i++) {
+      const char = input[i];
+
+      if (char === '<') {
+        depth++;
+        buffer += char;
+      } else if (char === '>') {
+        depth = Math.max(depth - 1, 0); // avoid negative depth
+        buffer += char;
+      } else if (char === ' ' && depth === 0) {
+        if (buffer.length > 0) {
+          tokens.push(buffer);
+          buffer = '';
+        }
+      } else {
+        buffer += char;
+      }
+    }
+
+    if (buffer.length > 0) {
+      tokens.push(buffer);
+    }
+
+    return tokens;
   }
 }

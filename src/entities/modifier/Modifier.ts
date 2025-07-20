@@ -26,3 +26,7 @@ export function findModifiers(value: unknown): Modifier[] {
 
   return modifiers;
 }
+
+export function isModifier(value: unknown): value is Modifier {
+  return Object.values(ModifierEnum).includes(value as Modifier);
+}

@@ -69,7 +69,7 @@ export class LegacyObjectQueryStrategy implements ObjectQueryStrategy {
     }
 
     const text = $comment.text().trim() || null;
-    const forRemoval = $object('.deprecated-label')
+    const forRemoval = $object('.description .deprecated-label')
       .text()
       .includes('for removal');
 
