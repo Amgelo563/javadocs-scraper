@@ -7,6 +7,7 @@
 A TypeScript library to scrape Java objects information from a Javadocs website.
 
 ![Build Status](https://img.shields.io/github/actions/workflow/status/Amgelo563/javadocs-scraper/build.yml?style=for-the-badge&logo=github)
+[![Test Status](https://img.shields.io/github/actions/workflow/status/Amgelo563/javadocs-scraper/test.yml?style=for-the-badge&logo=github&label=tests)](https://github.com/Amgelo563/javadocs-scraper/actions/workflows/test.yml)
 [![Latest Release](https://img.shields.io/github/v/release/Amgelo563/javadocs-scraper?style=for-the-badge&logo=nodedotjs&color=5FA04E)](https://github.com/Amgelo563/javadocs-scraper/releases/latest)
 [![View on Typedoc](https://img.shields.io/badge/View%20on-Typedoc-9600ff?style=for-the-badge&logo=gitbook&logoColor=9600ff)](https://amgelo563.github.io/javadocs-scraper//) 
 [![Built with Typescript](https://img.shields.io/badge/Built%20with-Typescript-3176C6?style=for-the-badge&logo=typescript&logoColor=3178C6)](https://www.typescriptlang.org/)
