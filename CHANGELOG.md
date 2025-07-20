@@ -1,3 +1,44 @@
+## [2.0.0](https://github.com/Amgelo563/javadocs-scraper/compare/v1.5.2...v2.0.0) (2025-07-20)
+
+### ⚠ BREAKING CHANGES
+
+* split annotation element logic from MethodScraper to a new scraper
+* split strategies into multiple sub-interfaces
+* make DeprecationContent#forRemoval non nullable
+
+### Features
+
+* type Javadocs properties as Collections ([cb29cd0](https://github.com/Amgelo563/javadocs-scraper/commit/cb29cd0e23c59cfb77870e210ccc3869e0ab8458))
+
+### Bug Fixes
+
+* add objects to their respective package after patching ([506a892](https://github.com/Amgelo563/javadocs-scraper/commit/506a89250e206a6c4bd52278c7beea9941e237c7))
+* **annotation-element:** fix getting incorrect blocks for description ([6875df3](https://github.com/Amgelo563/javadocs-scraper/commit/6875df34e5c1915e82d8ade960275ae0908a0b98))
+* **annotation-element:** fix legacy table, name and deprecation queries ([17ca6f4](https://github.com/Amgelo563/javadocs-scraper/commit/17ca6f443b5614d451697eacbe8382473b6a4616))
+* correctly query extensions for java 13 and 14 ([1c3cac0](https://github.com/Amgelo563/javadocs-scraper/commit/1c3cac0e297b1f1f5c349497baf89a3b9e00007a))
+* **enum-constant:** fix table queries for most versions ([7425e2b](https://github.com/Amgelo563/javadocs-scraper/commit/7425e2b1264bb3b4cee7d0ba08d28d0d82d2e74f))
+* export new strategies ([518df00](https://github.com/Amgelo563/javadocs-scraper/commit/518df00bb6a71af1c95e89c72b8b8541dc611cf9))
+* **field:** correctly fallback deprecation html to text ([29c9a16](https://github.com/Amgelo563/javadocs-scraper/commit/29c9a16f4d1ab3f97173926b028a2097da28d98c))
+* **field:** fix missing deprecation if it didn't have a comment ([4d3808c](https://github.com/Amgelo563/javadocs-scraper/commit/4d3808cd0d40938f3eae61efc3af5a1859b5d416))
+* fix nullability check for node contents ([a7a9d9f](https://github.com/Amgelo563/javadocs-scraper/commit/a7a9d9f81b6150d00a13bd1f82daaa987c137ef7))
+* fix object description query from java 13 to 16 ([59794b2](https://github.com/Amgelo563/javadocs-scraper/commit/59794b2da05a62d2c2a5009bc4d57869ac17e073))
+* fix object signature query from java 13 to 16 ([b2d4fe5](https://github.com/Amgelo563/javadocs-scraper/commit/b2d4fe5a431876b1c7f434a06b04bfaad41b2528))
+* **method:** fix edge-cases for return type and deprecation detection ([fa6721b](https://github.com/Amgelo563/javadocs-scraper/commit/fa6721bc0a76793620ee8038aebc941ceae9c644))
+* **method:** fix incorrect return type being extracted for some versions ([2cf0724](https://github.com/Amgelo563/javadocs-scraper/commit/2cf0724a3834324cadcfada2e0eef7ce4ddaa291))
+* **method:** fix nullability for description and edge-case with type params ([2ed5708](https://github.com/Amgelo563/javadocs-scraper/commit/2ed57080a2f46b9bb3aab44317f191dbe6e8f990))
+* **method:** yet another deprecation fix for java 15 ([fcd0f96](https://github.com/Amgelo563/javadocs-scraper/commit/fcd0f96c597b088c24ec8a39f0f07ba6809b592b))
+* more accurate strategy resolution method ([79486ff](https://github.com/Amgelo563/javadocs-scraper/commit/79486fff7ac3f1198cffea00edfa1d63c2d35aaf))
+* **object:** fix deprecation querying for various versions ([a4ace97](https://github.com/Amgelo563/javadocs-scraper/commit/a4ace97b4015b85ad2411d96a9beefff6322d98c))
+* patch method prototype arguments for legacy javadocs ([2c8abd9](https://github.com/Amgelo563/javadocs-scraper/commit/2c8abd91de028f9ee7849ce2493d280d31e4685e))
+* patch method prototypes for legacy javadocs ([ae884b2](https://github.com/Amgelo563/javadocs-scraper/commit/ae884b24843a51898ba2eb133462e0b4ba31207f))
+* strip whitespace from signatures ([f3623c1](https://github.com/Amgelo563/javadocs-scraper/commit/f3623c106d78cfe8b65daa037c4a6bdc81e3b8e3))
+
+### Code Refactoring
+
+* make DeprecationContent[#for](https://github.com/Amgelo563/javadocs-scraper/issues/for)Removal non nullable ([af30391](https://github.com/Amgelo563/javadocs-scraper/commit/af3039183837a85c656425004abd80c3cefa0246))
+* split annotation element logic from MethodScraper to a new scraper ([9018dda](https://github.com/Amgelo563/javadocs-scraper/commit/9018dda4847cf65c42e67400b2e1267127dc5aed))
+* split strategies into multiple sub-interfaces ([71ecb9f](https://github.com/Amgelo563/javadocs-scraper/commit/71ecb9f85c7a0a857d14e67d73076b5dcc9cfeff))
+
 ## [1.5.2](https://github.com/Amgelo563/javadocs-scraper/compare/v1.5.1...v1.5.2) (2025-07-13)
 
 ### Bug Fixes
