@@ -16,7 +16,8 @@
     "format": "prettier --write src",
     "format:file": "prettier --write",
     "prepare": "husky || true",
-    "typedoc": "typedoc src/index.ts"
+    "typedoc": "typedoc src/index.ts",
+    "test": "vitest run"
   },
   "files": [
     "dist"
