@@ -2,3 +2,4 @@
 *.jpg binary
 *.png binary
 *.ico binary
+*.html -linguist-detectable
