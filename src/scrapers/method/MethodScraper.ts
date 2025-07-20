@@ -3,7 +3,10 @@ import type { Cheerio, CheerioAPI } from 'cheerio';
 import { load } from 'cheerio';
 import type { Element } from 'domhandler';
 import { resolve as urlResolve } from 'url';
-import { findAccessModifier } from '../../entities/access/AccessModifier';
+import {
+  findAccessModifier,
+  isAccessModifier,
+} from '../../entities/access/AccessModifier';
 import type { MethodData } from '../../entities/method/MethodData';
 import type { MethodReturnData } from '../../entities/method/return/MethodReturnData';
 import type { MethodTypeParameterData } from '../../entities/method/type/MethodTypeParameterData';
@@ -56,6 +59,13 @@ export class MethodScraper {
       const $description = methodStrategy.queryMethodDescription($method);
       const description = $description.text().trim() || null;
       const descriptionHtml = $description.html()?.trim() || description;
+      const descriptionObject =
+        description || descriptionHtml
+          ? {
+              text: description,
+              html: descriptionHtml,
+            }
+          : null;
 
       const parameters = this.extractParameters(
         $object,
@@ -75,10 +85,7 @@ export class MethodScraper {
         entityType: EntityTypeEnum.Method,
         name,
         url,
-        description: {
-          text: description,
-          html: descriptionHtml,
-        },
+        description: descriptionObject,
         modifiers,
         parameters,
         signature,
@@ -226,7 +233,12 @@ export class MethodScraper {
     signature: string,
   ): Collection<string, MethodTypeParameterData> {
     const data = new Collection<string, MethodTypeParameterData>();
-    if (!signature || !signature.startsWith('<')) {
+    const parts = signature.split(' ', 2);
+    if (isAccessModifier(parts[0])) {
+      parts.shift();
+    }
+
+    if (!parts[0] || !parts[0].startsWith('<')) {
       return data;
     }
 
