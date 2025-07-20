@@ -30,7 +30,7 @@ Specifically, it scrapes data (name, description, url, etc) about, and links tog
 Some extra data is also calculated post scraping, like method and field inheritance.
 
 > [!CAUTION]
-> Tested with Javadocs generated from Java 7 to Java 21. I cannot guarantee this will work with older or newer versions.
+> Tested with Javadocs generated from Java 8 to Java 21. I cannot guarantee this will work with older or newer versions.
 
 #### Contents
 - [`📦` Installation and Usage](#-installation-and-usage)

@@ -11,59 +11,89 @@ export default typescriptEslint.config(
   ...typescriptEslint.configs.recommended,
   prettierConfig,
   {
-    ignores: ['dist/', 'eslint.config.mjs', 'commitlint.config.js', 'tsup.config.ts', '.releaserc.js'],
+    ignores: [
+      'dist/',
+      'eslint.config.mjs',
+      'commitlint.config.js',
+      'tsup.config.ts',
+      '.releaserc.js',
+    ],
+    files: ['src/**/*.ts', '__tests__/**/*.ts'],
     rules: {
       /** Eslint rules */
       'lines-between-class-members': ['error', 'always'],
-      'semi': ['error', 'always'],
+      semi: ['error', 'always'],
       'no-multiple-empty-lines': ['error'],
-      'quotes': ['error', 'single', {
-        avoidEscape: true,
-      }],
-      'operator-linebreak': ['error', 'before', {
-        overrides: {
-          '=': 'after',
-          '+=': 'after',
-          '-=': 'after',
-          '*=': 'after',
-          '/=': 'after',
+      quotes: [
+        'error',
+        'single',
+        {
+          avoidEscape: true,
         },
-      }],
-      'max-len': ['error', {
-        code: 100,
-        tabWidth: 2,
-        ignoreComments: true,
-        ignoreTrailingComments: true,
-        ignoreUrls: true,
-        ignoreStrings: true,
-        ignoreTemplateLiterals: true,
-        ignoreRegExpLiterals: true,
-      }],
+      ],
+      'operator-linebreak': [
+        'error',
+        'before',
+        {
+          overrides: {
+            '=': 'after',
+            '+=': 'after',
+            '-=': 'after',
+            '*=': 'after',
+            '/=': 'after',
+          },
+        },
+      ],
+      'max-len': [
+        'error',
+        {
+          code: 100,
+          tabWidth: 2,
+          ignoreComments: true,
+          ignoreTrailingComments: true,
+          ignoreUrls: true,
+          ignoreStrings: true,
+          ignoreTemplateLiterals: true,
+          ignoreRegExpLiterals: true,
+        },
+      ],
 
       /** TS Eslint rules */
-      '@typescript-eslint/explicit-member-accessibility': ['error', {
-        accessibility: 'explicit',
-        overrides: {
-          constructors: 'no-public',
+      '@typescript-eslint/explicit-member-accessibility': [
+        'error',
+        {
+          accessibility: 'explicit',
+          overrides: {
+            constructors: 'no-public',
+          },
         },
-      }],
+      ],
       '@typescript-eslint/no-floating-promises': 'error',
       '@typescript-eslint/require-await': 'error',
       '@typescript-eslint/await-thenable': 'error',
       /** Only allow unused vars if prefixed by _ */
-      '@typescript-eslint/no-unused-vars': ['error', {
-        argsIgnorePattern: '^_',
-        destructuredArrayIgnorePattern: '^_',
-        caughtErrors: 'none',
-      }],
-      '@typescript-eslint/ban-ts-comment': ['error', {
-        'ts-expect-error': 'allow-with-description',
-      }],
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          argsIgnorePattern: '^_',
+          destructuredArrayIgnorePattern: '^_',
+          caughtErrors: 'none',
+        },
+      ],
+      '@typescript-eslint/ban-ts-comment': [
+        'error',
+        {
+          'ts-expect-error': 'allow-with-description',
+        },
+      ],
       '@typescript-eslint/consistent-type-imports': 'warn',
       '@typescript-eslint/no-explicit-any': 'off',
-      '@typescript-eslint/no-empty-object-type': ['error', {
-        allowInterfaces: 'always',
-      }],
+      '@typescript-eslint/no-empty-object-type': [
+        'error',
+        {
+          allowInterfaces: 'always',
+        },
+      ],
     },
     languageOptions: {
       parser: typescriptEslintParser,

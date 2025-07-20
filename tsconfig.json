@@ -21,7 +21,8 @@
     "removeComments": false,
   },
   "include": [
-    "src"
+    "src",
+    "__tests__",
   ],
   "exclude": [
     "dist",
