@@ -14,6 +14,8 @@ import {
 import { EnumNames } from '../../../constants/EnumNames';
 import { StringNames } from '../../../constants/StringNames';
 import type { FixtureJavaVersion } from '../../../test/FixtureJavaVersion';
+import { supportsExternalObjects } from '../../../test/FixtureJavaVersion';
+import { generateJ7ComparatorInterface } from '../../external/ComparatorInterface';
 import { generateSupplierInterface } from '../../external/SupplierInterface';
 import { generateMemberUrl } from '../../general/member/MemberValuesFactory';
 import {
@@ -32,7 +34,8 @@ function generateValuesMethod(
   let descriptionHtml = `Returns an array containing the constants of this ${enumKind}, in\nthe order they are declared.`;
 
   switch (version) {
-    // java 8 had a typo with an extra space
+    // java 7 and 8 had a typo with an extra space
+    case 7:
     case 8:
       descriptionText += ' ';
       descriptionHtml += ' ';
@@ -90,6 +93,12 @@ function generateValueOfMethod(
 ): MethodData<null> {
   const enumKind = version >= 16 ? 'class' : 'type';
   const stringName = StringNames[version];
+  let thirdLine = `enum constant in this ${enumKind}.  (Extraneous whitespace characters are`;
+  if (version === 7) {
+    // java 7 had a typo with an extra space
+    thirdLine += ' ';
+  }
+
   return {
     entityType: EntityTypeEnum.Method,
     id: 'valueOf(java.lang.String)',
@@ -100,13 +109,13 @@ function generateValueOfMethod(
       text: [
         `Returns the enum constant of this ${enumKind} with the specified name.`,
         'The string must match exactly an identifier used to declare an',
-        `enum constant in this ${enumKind}.  (Extraneous whitespace characters are`,
+        thirdLine,
         'not permitted.)',
       ].join('\n'),
       html: [
         `Returns the enum constant of this ${enumKind} with the specified name.`,
         'The string must match <i>exactly</i> an identifier used to declare an',
-        `enum constant in this ${enumKind}.  (Extraneous whitespace characters are`,
+        thirdLine,
         'not permitted.)',
       ].join('\n'),
     },
@@ -209,6 +218,58 @@ function generateCountMethod(enumUrl: string): MethodData<null> {
   };
 }
 
+function generateJ7CompareMethod(): MethodData<null> {
+  return {
+    entityType: EntityTypeEnum.Method,
+    signature: 'public int compare(java.lang.String o1, java.lang.String o2)',
+    id: 'compare(java.lang.String,java.lang.String)',
+    prototype: 'compare(java.lang.String,java.lang.String)',
+    name: 'compare',
+    url: generateMemberUrl(
+      'java.util.Comparator',
+      'compare(java.lang.String,java.lang.String)',
+    ),
+    description: null,
+    modifiers: [],
+    parameters: new Collection([
+      [
+        'o1',
+        {
+          entityType: EntityTypeEnum.Parameter,
+          id: 'o1',
+          name: 'o1',
+          type: 'java.lang.String',
+          annotations: [],
+          description: null,
+          signature: 'String o1',
+        },
+      ],
+      [
+        'o2',
+        {
+          entityType: EntityTypeEnum.Parameter,
+          id: 'o2',
+          name: 'o2',
+          type: 'java.lang.String',
+          annotations: [],
+          description: null,
+          signature: 'String o2',
+        },
+      ],
+    ]),
+    typeParameters: new Collection(),
+    returns: {
+      entityType: EntityTypeEnum.MethodReturn,
+      type: 'int',
+      description: null,
+    },
+    deprecation: { forRemoval: false, text: null, html: null },
+    annotations: [],
+    accessModifier: AccessModifierEnum.Public,
+    inheritedFrom: null,
+  };
+}
+
 function generateOtherValueField(
   enumUrl: string,
   version: FixtureJavaVersion,
@@ -299,15 +360,29 @@ export function generateTestEnum(
   const constants = generateConstants(url);
   const enumName = EnumNames[version];
   const stringName = StringNames[version];
-  const supplierInterface = generateSupplierInterface(version);
+  const implemented =
+    version === 7
+      ? generateJ7ComparatorInterface()
+      : generateSupplierInterface(version);
 
-  let supplierMention: string;
+  let implementedMention: string;
   const implementations: EnumData['implements'] = new Collection();
-  if (version >= 16) {
-    supplierMention = `<a href="${supplierInterface.url}" title="class or interface in java.util.function" class="external-link"><code>Supplier</code></a>`;
-    implementations.set(supplierInterface.id, supplierInterface);
+  if (supportsExternalObjects(version)) {
+    implementedMention = `<a href="${implemented.url}" title="class or interface in java.util.function" class="external-link"><code>${implemented.name}</code></a>`;
+    implementations.set(implemented.id, implemented);
   } else {
-    supplierMention = '<code>Supplier</code>';
+    implementedMention = `<code>${implemented.signature}</code>`;
+  }
+
+  const methods = new Collection<string, MethodData<null>>([
+    ['values()', generateValuesMethod(url, version)],
+    ['valueOf(java.lang.String)', generateValueOfMethod(url, version)],
+    ['get()', generateGetMethod(url, version)],
+    ['count()', generateCountMethod(url)],
+  ]);
+  if (version === 7) {
+    const j7CompareMethod = generateJ7CompareMethod();
+    methods.set(j7CompareMethod.id, j7CompareMethod);
   }
 
   const id = generateObjectQualifiedName(enumPackage.name, 'TestEnum');
@@ -316,30 +391,25 @@ export function generateTestEnum(
     id,
     qualifiedName: id,
     name: 'TestEnum',
-    signature: `@Deprecated public enum TestEnum extends ${enumName}<TestEnum> implements ${supplierInterface.name}<${stringName}>`,
+    signature: `@Deprecated public enum TestEnum extends ${enumName}<TestEnum> implements ${implemented.name}<${stringName}>`,
     description: {
       text: [
         'Represents different statuses with detailed documentation.',
         '',
-        ' This enum implements Supplier and demonstrates use of fields,',
+        ` This enum implements ${implemented.signature} and demonstrates use of fields,`,
         ' methods, deprecations, and enum constants with ordinal values.',
       ].join('\n'),
       html: [
         'Represents different statuses with detailed documentation.',
         '',
-        ` <p>This enum implements ${supplierMention} and demonstrates use of fields,`,
+        ` <p>This enum implements ${implementedMention} and demonstrates use of fields,`,
         ' methods, deprecations, and enum constants with ordinal values.</p>',
       ].join('\n'),
     },
     url,
     package: enumPackage,
     constants,
-    methods: new Collection([
-      ['values()', generateValuesMethod(url, version)],
-      ['valueOf(java.lang.String)', generateValueOfMethod(url, version)],
-      ['get()', generateGetMethod(url, version)],
-      ['count()', generateCountMethod(url)],
-    ]),
+    methods,
     fields: new Collection([
       ['otherValue', generateOtherValueField(url, version)],
     ]),

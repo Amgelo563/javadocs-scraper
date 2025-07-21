@@ -14,6 +14,7 @@ export function collectionsMatch<K, V>(options: {
       path: options.path.concat('size'),
       expected: expected.size,
       got: got.size,
+      extra: `Got ${got.size} keys: ${Array.from(got.keys()).map(String).join(', ')}`,
     });
   }
 

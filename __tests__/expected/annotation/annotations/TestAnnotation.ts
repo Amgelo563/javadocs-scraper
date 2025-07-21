@@ -24,8 +24,8 @@ function generateElements(
   version: FixtureJavaVersion,
 ): Collection<string, AnnotationElementData> {
   const stringName = StringNames[version];
-  const modifiers = version === 8 ? [ModifierEnum.Abstract] : [];
-  const legacySignaturePrefix = version === 8 ? 'public abstract ' : '';
+  const modifiers = version <= 8 ? [ModifierEnum.Abstract] : [];
+  const legacySignaturePrefix = version <= 8 ? 'public abstract ' : '';
 
   const elements = new Collection<string, AnnotationElementData>();
 
@@ -140,7 +140,7 @@ export function generateTestAnnotation(
 ): AnnotationData {
   const url = generateObjectUrl(annotationPackage.url, 'TestAnnotation');
   const elements = generateElements(url, version);
-  const valuePrefix = version === 8 ? 'value=' : '';
+  const valuePrefix = version <= 8 ? 'value=' : '';
 
   const id = generateObjectQualifiedName(
     annotationPackage.name,

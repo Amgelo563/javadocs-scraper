@@ -1,6 +1,7 @@
 import type { FixtureJavaVersion } from '../test/FixtureJavaVersion';
 
 export const ObjectNames = {
+  7: 'java.lang.Object',
   8: 'java.lang.Object',
   9: 'java.lang.Object',
   10: 'java.lang.Object',

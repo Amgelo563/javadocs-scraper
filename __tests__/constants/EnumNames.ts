@@ -1,6 +1,7 @@
 import type { FixtureJavaVersion } from '../test/FixtureJavaVersion';
 
 export const EnumNames = {
+  7: 'java.lang.Enum',
   8: 'java.lang.Enum',
   9: 'java.lang.Enum',
   10: 'java.lang.Enum',

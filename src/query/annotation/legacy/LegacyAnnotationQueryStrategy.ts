@@ -8,27 +8,27 @@ export class LegacyAnnotationQueryStrategy implements AnnotationQueryStrategy {
   public queryElementTables($object: CheerioAPI): Cheerio<Element> {
     const blocks: Cheerio<AnyNode>[] = [];
 
-    $object('a[name$="--"], a[id$="()"], section[id$="()"]').each(
-      (_, anchor) => {
-        const $anchor = $object(anchor);
-        let $ul = $anchor.next('ul');
-        if (!$ul || !$ul.length) {
-          const parent = anchor.parent?.parent;
-          if (!parent || parent.type !== 'tag') {
-            throw new Error(
-              `Expected <ul> after <a> but found ${parent ?? 'null'}`,
-            );
-          }
-
-          $ul = $object(parent);
+    $object(
+      'a[name$="--"], a[name$="()"], a[id$="()"], section[id$="()"]',
+    ).each((_, anchor) => {
+      const $anchor = $object(anchor);
+      let $ul = $anchor.next('ul');
+      if (!$ul || !$ul.length) {
+        const parent = anchor.parent?.parent;
+        if (!parent || parent.type !== 'tag') {
+          throw new Error(
+            `Expected <ul> after <a> but found ${parent ?? 'null'}`,
+          );
         }
 
-        const wrapper = $object('<div></div>');
-        wrapper.append($anchor.clone(), $ul.clone());
+        $ul = $object(parent);
+      }
 
-        blocks.push(wrapper);
-      },
-    );
+      const wrapper = $object('<div></div>');
+      wrapper.append($anchor.clone(), $ul.clone());
+
+      blocks.push(wrapper);
+    });
 
     const merged: AnyNode[] = [];
     for (const cheerioArray of blocks) {
@@ -70,7 +70,7 @@ export class LegacyAnnotationQueryStrategy implements AnnotationQueryStrategy {
   }
 
   public queryElementDescription($element: Cheerio<Element>): Cheerio<Element> {
-    // java 8-12
+    // java 7-12
     const legacy = $element.find('ul > li.blockList > div.block').last();
     // second is java 13+
     return legacy.length ? legacy : $element.find('div.block').first();

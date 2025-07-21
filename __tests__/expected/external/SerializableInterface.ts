@@ -4,6 +4,7 @@ import type { FixtureJavaVersion } from '../../test/FixtureJavaVersion';
 
 // not a function to be more explicit with the values and in case the link formats change
 const UrlMappings = {
+  7: '',
   8: '',
   9: '',
   10: '',
@@ -21,6 +22,7 @@ const UrlMappings = {
 } satisfies Record<FixtureJavaVersion, string>;
 
 const SerializableNames = {
+  7: 'java.io.Serializable',
   8: 'java.io.Serializable',
   9: 'java.io.Serializable',
   10: 'java.io.Serializable',

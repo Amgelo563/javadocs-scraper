@@ -323,6 +323,7 @@ function generateDataListField(classUrl: string, version: FixtureJavaVersion) {
 function generateOldField(classUrl: string, version: FixtureJavaVersion) {
   let valueMention: string;
   switch (version) {
+    case 7:
     case 8:
     case 9:
     case 10:

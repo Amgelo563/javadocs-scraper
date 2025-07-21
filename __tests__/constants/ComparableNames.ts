@@ -1,6 +1,7 @@
 import type { FixtureJavaVersion } from '../test/FixtureJavaVersion';
 
 export const ComparableNames = {
+  7: 'java.lang.Comparable',
   8: 'java.lang.Comparable',
   9: 'java.lang.Comparable',
   10: 'java.lang.Comparable',

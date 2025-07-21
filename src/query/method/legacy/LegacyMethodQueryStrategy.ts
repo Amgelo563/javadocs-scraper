@@ -38,7 +38,7 @@ export class LegacyMethodQueryStrategy implements MethodQueryStrategy {
       );
     }
 
-    // java 8-12
+    // java 7-12
     const h3Element = $object('h3').filter((_, el) => {
       const text = $object(el).text().trim();
       return text === 'Method Detail';
@@ -66,7 +66,7 @@ export class LegacyMethodQueryStrategy implements MethodQueryStrategy {
 
   public queryMethodPrototypeText($method: Cheerio<Element>): string {
     return (
-      $method.find('a').attr('name')
+      $method.find('a').attr('name')?.replaceAll(' ', '')
       ?? $method.find('a').attr('id')
       ?? $method.find('section').attr('id')
       ?? ''
@@ -98,7 +98,8 @@ export class LegacyMethodQueryStrategy implements MethodQueryStrategy {
     const filtered = blocks.filter((_, el) => {
       const $el = $method.find(el);
       const directSpans = $el.children('span.deprecatedLabel');
-      return directSpans.length === 0;
+      const strong = $el.children('span.strong');
+      return directSpans.length === 0 && strong.text().trim() !== 'Deprecated.';
     });
 
     return filtered.last();
@@ -154,6 +155,25 @@ export class LegacyMethodQueryStrategy implements MethodQueryStrategy {
   public queryMethodDeprecation(
     $method: Cheerio<Element>,
   ): DeprecationContent | null {
+    // j7
+    const deprecatedBlock = $method
+      .find('div.block')
+      .filter((_, el) => {
+        const span = $method.find(el).find('span.strong').first();
+        return span.length === 1 && span.text().trim() === 'Deprecated.';
+      })
+      .first();
+    if (deprecatedBlock.length) {
+      const $comment = deprecatedBlock.find('i');
+      const text = $comment.text().trim() || null;
+      const html = $comment.html() ?? text;
+      return {
+        text,
+        html,
+        forRemoval: false,
+      };
+    }
+
     const $label = $method.find('.deprecatedLabel, .deprecated-label');
     if (!$label.length) return null;
 

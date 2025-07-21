@@ -4,6 +4,7 @@ import type { FixtureJavaVersion } from '../../test/FixtureJavaVersion';
 
 // not a function to be more explicit with the values and in case the link formats change
 const UrlMappings = {
+  7: '',
   8: '',
   9: '',
   10: '',
@@ -21,6 +22,7 @@ const UrlMappings = {
 } satisfies Record<FixtureJavaVersion, string>;
 
 const SupplierNames = {
+  7: 'java.util.function.Supplier',
   8: 'java.util.function.Supplier',
   9: 'java.util.function.Supplier',
   10: 'java.util.function.Supplier',

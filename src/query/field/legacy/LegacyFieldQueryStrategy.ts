@@ -29,7 +29,7 @@ export class LegacyFieldQueryStrategy implements FieldQueryStrategy {
       );
     }
 
-    // java 8-12
+    // java 7-12
     const h3Element = $object('h3').filter((_, el) => {
       const text = $object(el).text().trim();
       return text === 'Field Detail';
@@ -72,10 +72,16 @@ export class LegacyFieldQueryStrategy implements FieldQueryStrategy {
   }
 
   public queryFieldDescription($field: Cheerio<Element>): Cheerio<Element> {
-    // java 8-12
-    const legacy = $field.find('ul > li.blockList > div.block').last();
-    // second is java 13+
-    return legacy.length ? legacy : $field.find('div.block');
+    const blocks = $field.find('div.block');
+
+    const filtered = blocks.filter((_, el) => {
+      const $el = $field.find(el);
+      const directSpans = $el.children('span.deprecatedLabel');
+      const strong = $el.children('span.strong');
+      return directSpans.length === 0 && strong.text().trim() !== 'Deprecated.';
+    });
+
+    return filtered.last();
   }
 
   public queryFieldModifiersText($signature: Cheerio<Element>): string {
@@ -93,6 +99,25 @@ export class LegacyFieldQueryStrategy implements FieldQueryStrategy {
   public queryFieldDeprecation(
     $field: Cheerio<Element>,
   ): DeprecationContent | null {
+    // j7
+    const deprecatedBlock = $field
+      .find('div.block')
+      .filter((_, el) => {
+        const span = $field.find(el).find('span.strong').first();
+        return span.length === 1 && span.text().trim() === 'Deprecated.';
+      })
+      .first();
+    if (deprecatedBlock.length) {
+      const $comment = deprecatedBlock.find('i');
+      const text = $comment.text().trim() || null;
+      const html = $comment.html() ?? text;
+      return {
+        text,
+        html,
+        forRemoval: false,
+      };
+    }
+
     const $block = $field.find(
       'div.block > .deprecatedLabel, div.deprecationBlock, div.deprecation-block',
     );

@@ -1,6 +1,7 @@
 import type { FixtureJavaVersion } from '../test/FixtureJavaVersion';
 
 export const ListNames = {
+  7: 'java.util.List',
   8: 'java.util.List',
   9: 'java.util.List',
   10: 'java.util.List',
