@@ -53,10 +53,10 @@ pnpm add javadocs-scraper
 import { Scraper } from 'javadocs-scraper';
 
 // From an online URL:
-const scraper = Scraper.fromURL('https://...');
+const urlScraper = Scraper.fromURL('https://...');
 
 // From a local path:
-const scraper = Scraper.fromPath('./path/to/javadocs/index.html');
+const pathScraper = Scraper.fromPath('./path/to/javadocs/index.html');
 ```
 
 > [!NOTE]
@@ -145,11 +145,9 @@ The scraping process ocurs in the following steps:
 > ```ts
 > import { OnlineFetcher } from 'javadocs-scraper';
 > 
-> const myFetcher = new OnlineFetcher('https://...');
-> const factory = ($root: CheerioAPI) => {...};
 > const scraper = Scraper.with({
->   fetcher: myFetcher,
->   strategyBundleFactory: factory
+>   fetcher: new OnlineFetcher('https://...'), // or any other Fetcher implementation
+>   strategyBundleFactory: ($root: CheerioAPI) => { /** ... */ },
 > });
 > ```
 
