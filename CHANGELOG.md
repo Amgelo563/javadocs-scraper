@@ -1,3 +1,9 @@
+## [2.1.0](https://github.com/Amgelo563/javadocs-scraper/compare/v2.0.0...v2.1.0) (2025-07-21)
+
+### Features
+
+* add java 7 support ([cde4cb0](https://github.com/Amgelo563/javadocs-scraper/commit/cde4cb0f7d689f889d77a2dc2decaa5bc75544ed))
+
 ## [2.0.0](https://github.com/Amgelo563/javadocs-scraper/compare/v1.5.2...v2.0.0) (2025-07-20)
 
 ### ⚠ BREAKING CHANGES
