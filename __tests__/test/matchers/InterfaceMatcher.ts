@@ -13,9 +13,9 @@ import { methodsMatch } from './MethodMatcher';
 export function interfacesMatch(options: {
   expected: InterfaceData;
   got: InterfaceData;
-  path: string[];
+  path?: string[];
 }): string | true {
-  const path = options.path.concat(options.got.name);
+  const path = (options.path ?? []).concat(options.got.name);
   const baseMatch = entitiesMatch({
     ...options,
     path,

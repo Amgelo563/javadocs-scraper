@@ -7,10 +7,12 @@ import { collectionsMatch } from './generic/CollectionMatcher';
 export function packagesMatch(options: {
   got: PackageData;
   expected: PackageData;
-  path: string[];
+  path?: string[];
   checkRelated?: boolean;
 }): string | true {
-  const path = options.path.concat(`Package ${options.got.subpackageName}#`);
+  const path = (options.path ?? []).concat(
+    `Package ${options.got.subpackageName}#`,
+  );
   const baseMatch = entitiesMatch({
     ...options,
     path,

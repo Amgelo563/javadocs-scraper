@@ -6,12 +6,12 @@ export function collectionsMatch<K, V>(options: {
   got: Collection<K, V>;
   expected: Collection<K, V>;
   comparator: (options: { got: V; expected: V; key: string }) => string | true;
-  path: string[];
+  path?: string[];
 }): string | true {
-  const { got, expected, comparator } = options;
+  const { got, expected, comparator, path = [] } = options;
   if (got.size !== expected.size) {
     return generateErrorMessage({
-      path: options.path.concat('size'),
+      path: path.concat('size'),
       expected: expected.size,
       got: got.size,
       extra: `Got ${got.size} keys: ${Array.from(got.keys()).map(String).join(', ')}`,
@@ -23,7 +23,7 @@ export function collectionsMatch<K, V>(options: {
     if (gotValue === undefined) {
       const gotKeys = Array.from(got.keys());
       return generateErrorMessage({
-        path: options.path.concat(`get("${String(expectedKey)}")`),
+        path: path.concat(`get("${String(expectedKey)}")`),
         expected: expectedValue,
         got: undefined,
         extra: `Got ${gotKeys.length} keys: ${gotKeys.map(String).join(', ')}`,

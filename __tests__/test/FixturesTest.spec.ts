@@ -25,12 +25,10 @@ describe('Fixtures', () => {
         const packagesHaveMatched = collectionsMatch({
           got: actual.getPackages(),
           expected: expected.getPackages(),
-          path: [],
           comparator: ({ got, expected }) => {
             return packagesMatch({
               got,
               expected,
-              path: [],
             });
           },
         });
@@ -47,12 +45,10 @@ describe('Fixtures', () => {
         const interfacesHaveMatched = collectionsMatch({
           got: actual.getInterfaces(),
           expected: expected.getInterfaces(),
-          path: [],
           comparator: ({ got, expected }) => {
             return interfacesMatch({
               got,
               expected,
-              path: [],
             });
           },
         });
@@ -69,12 +65,10 @@ describe('Fixtures', () => {
         const annotationsHaveMatched = collectionsMatch({
           got: actual.getAnnotations(),
           expected: expected.getAnnotations(),
-          path: [],
           comparator: ({ got, expected }) => {
             return annotationsMatch({
               got,
               expected,
-              path: [],
             });
           },
         });
@@ -91,12 +85,10 @@ describe('Fixtures', () => {
         const enumsHaveMatched = collectionsMatch({
           got: actual.getEnums(),
           expected: expected.getEnums(),
-          path: [],
           comparator: ({ got, expected }) => {
             return enumsMatch({
               got,
               expected,
-              path: [],
             });
           },
         });
@@ -113,12 +105,10 @@ describe('Fixtures', () => {
         const classesHaveMatched = collectionsMatch({
           got: actual.getClasses(),
           expected: expected.getClasses(),
-          path: [],
           comparator: ({ got, expected }) => {
             return classesMatch({
               got,
               expected,
-              path: [],
             });
           },
         });

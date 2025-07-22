@@ -15,9 +15,9 @@ import { methodsMatch } from './MethodMatcher';
 export function classesMatch(options: {
   expected: ClassData;
   got: ClassData;
-  path: string[];
+  path?: string[];
 }): string | true {
-  const path = options.path.concat(options.got.name);
+  const path = (options.path ?? []).concat(options.got.name);
   const baseMatch = entitiesMatch({
     ...options,
     path,

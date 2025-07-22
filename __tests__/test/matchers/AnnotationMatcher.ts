@@ -11,9 +11,9 @@ import {
 export function annotationsMatch(options: {
   expected: AnnotationData;
   got: AnnotationData;
-  path: string[];
+  path?: string[];
 }): true | string {
-  const path = options.path.concat(options.got.name);
+  const path = (options.path ?? []).concat(options.got.name);
   const baseMatch = entitiesMatch({
     ...options,
     path,
