@@ -12,36 +12,35 @@ import { packagesMatch } from './matchers/PackageMatcher';
 
 const testsRoot = pathJoin(__dirname, '..');
 
-describe('Scraper', () => {
+describe('Fixtures', () => {
   for (const version of FixtureJavaVersions) {
-    const expected = generateJavadocs(version);
-    const path = generatePath(version, testsRoot);
+    describe(`Java ${version}`, () => {
+      const expected = generateJavadocs(version);
+      const path = generatePath(version, testsRoot);
 
-    it.concurrent(`matches expected packages for Java ${version}`, async () => {
-      const scraper = Scraper.fromPath(path);
-      const actual = await scraper.scrape();
+      it.concurrent('matches expected packages', async () => {
+        const scraper = Scraper.fromPath(path);
+        const actual = await scraper.scrape();
 
-      const packagesHaveMatched = collectionsMatch({
-        got: actual.getPackages(),
-        expected: expected.getPackages(),
-        path: [],
-        comparator: ({ got, expected }) => {
-          return packagesMatch({
-            got,
-            expected,
-            path: [],
-          });
-        },
+        const packagesHaveMatched = collectionsMatch({
+          got: actual.getPackages(),
+          expected: expected.getPackages(),
+          path: [],
+          comparator: ({ got, expected }) => {
+            return packagesMatch({
+              got,
+              expected,
+              path: [],
+            });
+          },
+        });
+
+        if (packagesHaveMatched !== true) {
+          throw `Failed: ${packagesHaveMatched}`;
+        }
       });
 
-      if (packagesHaveMatched !== true) {
-        throw `Failed at Java ${version}: ${packagesHaveMatched}`;
-      }
-    });
-
-    it.concurrent(
-      `matches expected interfaces for Java ${version}`,
-      async () => {
+      it.concurrent('matches expected interfaces', async () => {
         const scraper = Scraper.fromPath(path);
         const actual = await scraper.scrape();
 
@@ -59,14 +58,11 @@ describe('Scraper', () => {
         });
 
         if (interfacesHaveMatched !== true) {
-          throw `Failed at Java ${version}: ${interfacesHaveMatched}`;
+          throw `Failed: ${interfacesHaveMatched}`;
         }
-      },
-    );
+      });
 
-    it.concurrent(
-      `matches expected annotations for Java ${version}`,
-      async () => {
+      it.concurrent('matches expected annotations', async () => {
         const scraper = Scraper.fromPath(path);
         const actual = await scraper.scrape();
 
@@ -84,53 +80,53 @@ describe('Scraper', () => {
         });
 
         if (annotationsHaveMatched !== true) {
-          throw `Failed at Java ${version}: ${annotationsHaveMatched}`;
+          throw `Failed: ${annotationsHaveMatched}`;
         }
-      },
-    );
-
-    it.concurrent(`matches expected enums for Java ${version}`, async () => {
-      const scraper = Scraper.fromPath(path);
-      const actual = await scraper.scrape();
-
-      const enumsHaveMatched = collectionsMatch({
-        got: actual.getEnums(),
-        expected: expected.getEnums(),
-        path: [],
-        comparator: ({ got, expected }) => {
-          return enumsMatch({
-            got,
-            expected,
-            path: [],
-          });
-        },
       });
 
-      if (enumsHaveMatched !== true) {
-        throw `Failed at Java ${version}: ${enumsHaveMatched}`;
-      }
-    });
+      it.concurrent('matches expected enums', async () => {
+        const scraper = Scraper.fromPath(path);
+        const actual = await scraper.scrape();
 
-    it.concurrent(`matches expected classes for Java ${version}`, async () => {
-      const scraper = Scraper.fromPath(path);
-      const actual = await scraper.scrape();
+        const enumsHaveMatched = collectionsMatch({
+          got: actual.getEnums(),
+          expected: expected.getEnums(),
+          path: [],
+          comparator: ({ got, expected }) => {
+            return enumsMatch({
+              got,
+              expected,
+              path: [],
+            });
+          },
+        });
 
-      const classesHaveMatched = collectionsMatch({
-        got: actual.getClasses(),
-        expected: expected.getClasses(),
-        path: [],
-        comparator: ({ got, expected }) => {
-          return classesMatch({
-            got,
-            expected,
-            path: [],
-          });
-        },
+        if (enumsHaveMatched !== true) {
+          throw `Failed: ${enumsHaveMatched}`;
+        }
       });
 
-      if (classesHaveMatched !== true) {
-        throw `Failed at Java ${version}: ${classesHaveMatched}`;
-      }
+      it.concurrent('matches expected classes', async () => {
+        const scraper = Scraper.fromPath(path);
+        const actual = await scraper.scrape();
+
+        const classesHaveMatched = collectionsMatch({
+          got: actual.getClasses(),
+          expected: expected.getClasses(),
+          path: [],
+          comparator: ({ got, expected }) => {
+            return classesMatch({
+              got,
+              expected,
+              path: [],
+            });
+          },
+        });
+
+        if (classesHaveMatched !== true) {
+          throw `Failed: ${classesHaveMatched}`;
+        }
+      });
     });
   }
 });
