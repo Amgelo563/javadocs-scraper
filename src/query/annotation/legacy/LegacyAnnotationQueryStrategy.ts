@@ -41,12 +41,12 @@ export class LegacyAnnotationQueryStrategy implements AnnotationQueryStrategy {
   }
 
   public queryElementPrototypeText($element: Cheerio<Element>): string {
-    const text =
+    return (
       $element.find('a').attr('name')
       ?? $element.find('a').attr('id')
       ?? $element.find('section').attr('id')
-      ?? '';
-    return text.replace('-', '(').replace('-', ')');
+      ?? ''
+    );
   }
 
   public queryElementSignature($element: Cheerio<Element>): Cheerio<Element> {
