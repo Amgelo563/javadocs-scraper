@@ -1,3 +1,9 @@
+## [2.1.1](https://github.com/Amgelo563/javadocs-scraper/compare/v2.1.0...v2.1.1) (2025-07-22)
+
+### Bug Fixes
+
+* remove unused function ([94ecc2a](https://github.com/Amgelo563/javadocs-scraper/commit/94ecc2a191b3e1594dbc74cc747f8778f4921b14))
+
 ## [2.1.0](https://github.com/Amgelo563/javadocs-scraper/compare/v2.0.0...v2.1.0) (2025-07-21)
 
 ### Features
