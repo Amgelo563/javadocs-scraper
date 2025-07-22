@@ -36,7 +36,7 @@ describe('Fixtures', () => {
         });
 
         if (packagesHaveMatched !== true) {
-          throw `Failed: ${packagesHaveMatched}`;
+          throw new Error(`Failed: ${packagesHaveMatched}`);
         }
       });
 
@@ -58,7 +58,7 @@ describe('Fixtures', () => {
         });
 
         if (interfacesHaveMatched !== true) {
-          throw `Failed: ${interfacesHaveMatched}`;
+          throw new Error(`Failed: ${interfacesHaveMatched}`);
         }
       });
 
@@ -80,7 +80,7 @@ describe('Fixtures', () => {
         });
 
         if (annotationsHaveMatched !== true) {
-          throw `Failed: ${annotationsHaveMatched}`;
+          throw new Error(`Failed: ${annotationsHaveMatched}`);
         }
       });
 
@@ -102,7 +102,7 @@ describe('Fixtures', () => {
         });
 
         if (enumsHaveMatched !== true) {
-          throw `Failed: ${enumsHaveMatched}`;
+          throw new Error(`Failed: ${enumsHaveMatched}`);
         }
       });
 
@@ -124,7 +124,7 @@ describe('Fixtures', () => {
         });
 
         if (classesHaveMatched !== true) {
-          throw `Failed: ${classesHaveMatched}`;
+          throw new Error(`Failed: ${classesHaveMatched}`);
         }
       });
     });
