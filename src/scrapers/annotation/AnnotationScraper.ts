@@ -59,9 +59,6 @@ export class AnnotationScraper {
       omitMethods: false,
     });
 
-    delete (base as { partialExtends?: unknown[] }).partialExtends;
-    delete (base as { partialImplements?: unknown[] }).partialImplements;
-
     const present = cache.partialAnnotations.get(base.qualifiedName);
     if (present) {
       return present;

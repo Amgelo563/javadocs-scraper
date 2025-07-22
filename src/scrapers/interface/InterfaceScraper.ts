@@ -30,7 +30,6 @@ export class InterfaceScraper {
       packageData,
       strategyBundle,
     });
-    delete (base as { partialImplements?: unknown[] }).partialImplements;
 
     const present = cache.partialInterfaces.get(base.qualifiedName);
     if (present) {
@@ -38,9 +37,19 @@ export class InterfaceScraper {
     }
 
     const data: PartialInterfaceData = {
-      ...base,
       id: base.qualifiedName,
       entityType: EntityTypeEnum.Interface,
+      partialPackage: base.partialPackage,
+      partialExtends: base.partialExtends,
+      qualifiedName: base.qualifiedName,
+      url: base.url,
+      methods: base.methods,
+      fields: base.fields,
+      typeParameters: base.typeParameters,
+      deprecation: base.deprecation,
+      name: base.name,
+      description: base.description,
+      signature: base.signature,
     };
 
     cache.partialInterfaces.set(data.id, data);

@@ -41,7 +41,6 @@ export class EnumScraper {
       packageData,
       strategyBundle,
     });
-    delete (base as { partialExtends?: unknown[] }).partialExtends;
 
     const present = cache.partialEnums.get(base.qualifiedName);
     if (present) {
@@ -64,10 +63,19 @@ export class EnumScraper {
     }
 
     const data: PartialEnumData = {
-      ...base,
       entityType: EntityTypeEnum.Enum,
       constants,
       id: base.qualifiedName,
+      partialPackage: base.partialPackage,
+      partialImplements: base.partialImplements,
+      qualifiedName: base.qualifiedName,
+      url: base.url,
+      methods: base.methods,
+      fields: base.fields,
+      deprecation: base.deprecation,
+      name: base.name,
+      description: base.description,
+      signature: base.signature,
     };
 
     cache.partialEnums.set(data.id, data);

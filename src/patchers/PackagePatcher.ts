@@ -1,14 +1,8 @@
 import { Collection } from '@discordjs/collection';
 import type { PackageData } from '../entities/package/PackageData';
+import { EntityTypeEnum } from '../entities/type/EntityType';
 import type { PartialPackageData } from '../partials/package/PartialPackageData';
 import type { ScrapeCache } from '../scrapers/cache/ScrapeCache';
-
-type PartialWithOptionals = Omit<
-  PartialPackageData,
-  'partialRelatedPackages'
-> & {
-  partialRelatedPackages?: PartialPackageData['partialRelatedPackages'];
-};
 
 /** Patches {@link PartialPackageData} to {@link PackageData}. */
 export class PackagePatcher {
@@ -35,8 +29,19 @@ export class PackagePatcher {
       packageData.relatedPackages.set(related, relatedPackage);
     }
 
-    delete (packageData as PartialWithOptionals).partialRelatedPackages;
-
-    return packageData;
+    return {
+      id: packageData.id,
+      name: packageData.name,
+      description: packageData.description,
+      url: packageData.url,
+      entityType: EntityTypeEnum.Package,
+      annotations: packageData.annotations,
+      classes: packageData.classes,
+      enums: packageData.enums,
+      interfaces: packageData.interfaces,
+      relatedPackages: packageData.relatedPackages,
+      signature: packageData.signature,
+      subpackageName: packageData.subpackageName,
+    };
   }
 }

@@ -1,12 +1,9 @@
 import { Collection } from '@discordjs/collection';
 import type { AnnotationData } from '../entities/annotation/AnnotationData';
 import type { PackageData } from '../entities/package/PackageData';
+import { EntityTypeEnum } from '../entities/type/EntityType';
 import type { PartialAnnotationData } from '../partials/annotation/PartialAnnotationData';
 import type { ScrapeCache } from '../scrapers/cache/ScrapeCache';
-
-type PartialWithOptionals = Omit<PartialAnnotationData, 'partialPackage'> & {
-  partialPackage?: PartialAnnotationData['partialPackage'];
-};
 
 /** Patches {@link PartialAnnotationData} to {@link AnnotationData}. */
 export class AnnotationPatcher {
@@ -32,11 +29,21 @@ export class AnnotationPatcher {
         `Package ${annotationData.qualifiedName} not found, but is package from annotation ${annotationData.qualifiedName}`,
       );
     }
-    delete (annotationData as PartialWithOptionals).partialPackage;
 
     const fullyPatched: AnnotationData = {
-      ...annotationData,
       package: packageData,
+      qualifiedName: annotationData.qualifiedName,
+      url: annotationData.url,
+      target: annotationData.target,
+      targets: annotationData.targets,
+      retention: annotationData.retention,
+      elements: annotationData.elements,
+      deprecation: annotationData.deprecation,
+      entityType: EntityTypeEnum.Annotation,
+      id: annotationData.id,
+      name: annotationData.name,
+      description: annotationData.description,
+      signature: annotationData.signature,
     };
 
     packageData.annotations.set(fullyPatched.id, fullyPatched);

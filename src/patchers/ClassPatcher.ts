@@ -2,17 +2,9 @@ import { Collection } from '@discordjs/collection';
 import type { ClassData } from '../entities/class/ClassData';
 import type { InterfaceData } from '../entities/interface/InterfaceData';
 import type { PackageData } from '../entities/package/PackageData';
+import { EntityTypeEnum } from '../entities/type/EntityType';
 import type { PartialClassData } from '../partials/class/PartialClassData';
 import type { ScrapeCache } from '../scrapers/cache/ScrapeCache';
-
-type PartialWithOptionals = Omit<
-  PartialClassData,
-  'partialExtends' | 'partialImplements' | 'partialPackage'
-> & {
-  partialExtends?: PartialClassData['partialExtends'];
-  partialImplements?: PartialClassData['partialImplements'];
-  partialPackage?: PartialClassData['partialPackage'];
-};
 
 /** Patches {@link PartialClassData} to {@link ClassData}. */
 export class ClassPatcher {
@@ -48,7 +40,6 @@ export class ClassPatcher {
         `Package ${classData.qualifiedName} not found, but is package from class ${classData.qualifiedName}`,
       );
     }
-    delete (classData as PartialWithOptionals).partialPackage;
 
     let extension: ClassData['extends'] = null;
 
@@ -104,7 +95,6 @@ export class ClassPatcher {
         extension = extended;
       }
     }
-    delete (classData as PartialWithOptionals).partialExtends;
 
     const implementations: ClassData['implements'] = new Collection();
     for (const implementation of classData.partialImplements) {
@@ -146,13 +136,23 @@ export class ClassPatcher {
 
       implementations.set(implemented.id, implemented);
     }
-    delete (classData as PartialWithOptionals).partialImplements;
 
     const fullyPatched: ClassData = {
-      ...classData,
       package: packageData,
       extends: extension,
       implements: implementations,
+      qualifiedName: classData.qualifiedName,
+      url: classData.url,
+      modifiers: classData.modifiers,
+      methods: classData.methods,
+      fields: classData.fields,
+      deprecation: classData.deprecation,
+      typeParameters: classData.typeParameters,
+      entityType: EntityTypeEnum.Class,
+      id: classData.id,
+      name: classData.name,
+      description: classData.description,
+      signature: classData.signature,
     };
 
     packageData.classes.set(fullyPatched.id, fullyPatched);

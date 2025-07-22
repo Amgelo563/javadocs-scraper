@@ -1,16 +1,9 @@
 import { Collection } from '@discordjs/collection';
 import type { InterfaceData } from '../entities/interface/InterfaceData';
 import type { PackageData } from '../entities/package/PackageData';
+import { EntityTypeEnum } from '../entities/type/EntityType';
 import type { PartialInterfaceData } from '../partials/interface/PartialInterfaceData';
 import type { ScrapeCache } from '../scrapers/cache/ScrapeCache';
-
-type PartialWithOptionals = Omit<
-  PartialInterfaceData,
-  'partialExtends' | 'partialPackage'
-> & {
-  partialExtends?: PartialInterfaceData['partialExtends'];
-  partialPackage?: PartialInterfaceData['partialPackage'];
-};
 
 /** Patches {@link PartialInterfaceData} to {@link InterfaceData}. */
 export class InterfacePatcher {
@@ -45,10 +38,8 @@ export class InterfacePatcher {
         `Package ${name} not found, but is package from interface ${name}`,
       );
     }
-    delete (interfaceData as PartialWithOptionals).partialPackage;
 
     const extensions: InterfaceData['extends'] = new Collection();
-
     for (const extension of interfaceData.partialExtends) {
       if (typeof extension === 'object') {
         extensions.set(extension.id, extension);
@@ -98,12 +89,21 @@ export class InterfacePatcher {
       }
       extensions.set(extended.id, extended);
     }
-    delete (interfaceData as PartialWithOptionals).partialExtends;
 
     const fullyPatched: InterfaceData = {
-      ...interfaceData,
       package: interfacePackage,
       extends: extensions,
+      qualifiedName: interfaceData.qualifiedName,
+      url: interfaceData.url,
+      methods: interfaceData.methods,
+      fields: interfaceData.fields,
+      typeParameters: interfaceData.typeParameters,
+      deprecation: interfaceData.deprecation,
+      entityType: EntityTypeEnum.Interface,
+      id: interfaceData.id,
+      name: interfaceData.name,
+      description: interfaceData.description,
+      signature: interfaceData.signature,
     };
 
     interfacePackage.interfaces.set(fullyPatched.id, fullyPatched);
