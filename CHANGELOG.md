@@ -1,3 +1,9 @@
+## [2.1.2](https://github.com/Amgelo563/javadocs-scraper/compare/v2.1.1...v2.1.2) (2025-07-24)
+
+### Bug Fixes
+
+* **annotation-element:** dont replace prototype so url isn't changed ([5a72f20](https://github.com/Amgelo563/javadocs-scraper/commit/5a72f20fe72d61fde0ef71f8b3fd21222d8cea51))
+
 ## [2.1.1](https://github.com/Amgelo563/javadocs-scraper/compare/v2.1.0...v2.1.1) (2025-07-22)
 
 ### Bug Fixes
